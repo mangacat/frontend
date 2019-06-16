@@ -15,7 +15,7 @@
     "start": "node __sapper__/build",
     "cy:run": "cypress run",
     "cy:open": "cypress open",
-    "test": "PORT=3100 run-s build:* start cy:run",
+    "test": "npm run build && (PORT=3100 run-p --race start cy:run)",
     "lint": "eslint --ext .js,.svelte --ignore-path .gitignore ."
   },
   "engines": {
