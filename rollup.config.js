@@ -32,6 +32,7 @@ export default {
 				'process.browser': true,
 				'process.env.NODE_ENV': JSON.stringify(mode),
 				'process.env.GOOGLE_ANALYTICS_ID': JSON.stringify(process.env.GOOGLE_ANALYTICS_ID),
+				'process.env.GOOGLE_RECAPTCHA_SITEKEY': JSON.stringify(process.env.GOOGLE_RECAPTCHA_SITEKEY),
 				'process.env.SENTRY_DSN': JSON.stringify(process.env.SENTRY_DSN)
 			}),
 			svelte({
@@ -74,6 +75,7 @@ export default {
 			replace({
 				'process.browser': false,
 				'process.env.NODE_ENV': JSON.stringify(mode),
+				'process.env.GOOGLE_RECAPTCHA_SITEKEY': JSON.stringify(process.env.GOOGLE_RECAPTCHA_SITEKEY),
 				'process.env.SENTRY_DSN': JSON.stringify(process.env.SENTRY_DSN),
 				'process.env.REDIS_HOST': JSON.stringify(process.env.REDIS_HOST),
 				'process.env.REDIS_PORT': JSON.stringify(process.env.REDIS_PORT),

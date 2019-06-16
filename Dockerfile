@@ -1,9 +1,19 @@
 FROM mhart/alpine-node:12
 
-# install dependencies
+# install apk dependencies
+RUN apk update && apk add --virtual build-dependencies \
+    build-base \
+    gcc \
+    wget \
+    git \
+    python
+
+# install node dependencies
 WORKDIR /app
 COPY package.json package-lock.json ./
-RUN npm ci --production
+RUN npm install
+RUN npm install -g npm-run-all
+COPY . .
 
 # build sapper
 RUN npm run build
@@ -16,7 +26,7 @@ FROM mhart/alpine-node:slim-12
 
 WORKDIR /app
 COPY --from=0 /app .
-COPY . .
+# COPY . .
 
 EXPOSE 3000
 CMD ["node", "__sapper__/build"]
