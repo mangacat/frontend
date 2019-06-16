@@ -1,5 +1,10 @@
 FROM mhart/alpine-node:12
 
+# install python
+RUN apk add --update \
+    python 
+  && rm -rf /var/cache/apk/*
+
 # install dependencies
 WORKDIR /app
 COPY package.json package-lock.json ./
