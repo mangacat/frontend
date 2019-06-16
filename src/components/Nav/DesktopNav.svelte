@@ -1,0 +1,180 @@
+<header bind:this={nav_container} class="fixed top-0 inset-x-0 bg-white border-b border-gray-300 dark:bg-gray-700 dark:border-gray-900 z-50">
+    <section class="flex items-center max-w-5xl mx-auto py-2 px-6">
+        <div class="flex-grow flex items-center mr-6 text-black dark:text-white">
+            <Icon class="h-10 mr-3" />
+            <a href="/" class="font-semibold text-xl tracking-tight">MangaCat Soon™</a>
+        </div>
+        <div class="flex-grow-0">
+            <ul class="flex items-center tracking-tight capitalize">
+                {#if $session.user}
+                    <li class="text-gray-900 dark:text-gray-100 mr-6 relative">
+                        <div bind:this={trigger} class="cursor-pointer {$session.user.mugshot ? 'h-10 w-10 rounded bg-cover bg-center' : ''}" style="{$session.user.mugshot ? `background-image: url('${cdn($session.user.mugshot, { resize: '80,80' })}');` : ''}">
+                            {#if !$session.user.mugshot}
+                                {$session.user.username}
+                            {/if}
+                        </div>
+                        {#if dropdown_open}
+                            <div transition:slide="{{ duration: 200 }}" class="select-none rounded absolute right-0 bg-white dark:bg-gray-700 shadow mt-1 py-2 border border-gray-300 dark:border-gray-900">
+                                <a class="block w-full py-2 px-4 flex items-center hover:bg-gray-200 dark:hover:bg-gray-800" href="/user/{$session.user.id}/{slugify($session.user.username)}">
+                                    <svg class="h-5 w-5 fill-current mr-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                        <path d="M12 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-2a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm9 11a1 1 0 0 1-2 0v-2a3 3 0 0 0-3-3H8a3 3 0 0 0-3 3v2a1 1 0 0 1-2 0v-2a5 5 0 0 1 5-5h8a5 5 0 0 1 5 5v2z"/>
+                                    </svg>
+                                    Profile
+                                </a>
+                                <a class="block w-full py-2 px-4 flex items-center hover:bg-gray-200 dark:hover:bg-gray-800" href="/settings/profile">
+                                    <svg class="h-5 w-5 fill-current mr-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                        <path d="M9 4.58V4c0-1.1.9-2 2-2h2a2 2 0 0 1 2 2v.58a8 8 0 0 1 1.92 1.11l.5-.29a2 2 0 0 1 2.74.73l1 1.74a2 2 0 0 1-.73 2.73l-.5.29a8.06 8.06 0 0 1 0 2.22l.5.3a2 2 0 0 1 .73 2.72l-1 1.74a2 2 0 0 1-2.73.73l-.5-.3A8 8 0 0 1 15 19.43V20a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2v-.58a8 8 0 0 1-1.92-1.11l-.5.29a2 2 0 0 1-2.74-.73l-1-1.74a2 2 0 0 1 .73-2.73l.5-.29a8.06 8.06 0 0 1 0-2.22l-.5-.3a2 2 0 0 1-.73-2.72l1-1.74a2 2 0 0 1 2.73-.73l.5.3A8 8 0 0 1 9 4.57zM7.88 7.64l-.54.51-1.77-1.02-1 1.74 1.76 1.01-.17.73a6.02 6.02 0 0 0 0 2.78l.17.73-1.76 1.01 1 1.74 1.77-1.02.54.51a6 6 0 0 0 2.4 1.4l.72.2V20h2v-2.04l.71-.2a6 6 0 0 0 2.41-1.4l.54-.51 1.77 1.02 1-1.74-1.76-1.01.17-.73a6.02 6.02 0 0 0 0-2.78l-.17-.73 1.76-1.01-1-1.74-1.77 1.02-.54-.51a6 6 0 0 0-2.4-1.4l-.72-.2V4h-2v2.04l-.71.2a6 6 0 0 0-2.41 1.4zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm0-2a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/>
+                                    </svg>
+                                    Settings
+                                </a>
+                                <button class="block w-full py-2 px-4 flex items-center hover:bg-gray-200 dark:hover:bg-gray-800" on:click={logout}>
+                                    <svg class="h-5 w-5 fill-current mr-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                        <path d="M18.59 13H7a1 1 0 0 1 0-2h11.59l-3.3-3.3a1 1 0 0 1 1.42-1.4l5 5a1 1 0 0 1 0 1.4l-5 5a1 1 0 1 1-1.42-1.4L18.6 13h-.01zM7 3a1 1 0 0 1 0 2H4v14h3a1 1 0 0 1 0 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3z" />
+                                    </svg>
+                                    Logout
+                                </button>
+                            </div>
+                        {/if}
+                    </li>
+                {:else}
+                    <li class="text-gray-900 hover:text-gray-600 dark:text-gray-100 dark:hover:text-gray-400 mr-6">
+                        <a href="/login">sign in</a>
+                    </li>
+                    <li class="text-gray-900 hover:text-gray-600 dark:text-gray-100 dark:hover:text-gray-400 mr-6">
+                        <a href="/signup">create account</a>
+                    </li>
+                {/if}
+                <li class="text-gray-900 hover:text-gray-600 dark:text-gray-100 dark:hover:text-gray-400">
+                    <svg class="w-6 h-6 cursor-pointer fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" on:click={toggle_search}>
+                        <path d="M16.32 14.9l1.1 1.1c.4-.02.83.13 1.14.44l3 3a1.5 1.5 0 0 1-2.12 2.12l-3-3a1.5 1.5 0 0 1-.44-1.14l-1.1-1.1a8 8 0 1 1 1.41-1.41l.01-.01zM10 16a6 6 0 1 0 0-12 6 6 0 0 0 0 12z" />
+                    </svg>
+                </li>
+            </ul>
+        </div>
+    </section>
+</header>
+
+{#if quick_search}
+    <div class="absolute inset-0 h-screen flex justify-center z-50">
+        <div transition:fade="{{ duration: 250 }}" class="absolute inset-0 h-screen bg-black opacity-50" on:click={toggle_search}></div>
+        <div bind:this={quick_search_container} transition:fly="{{ y: -20, duration: 250 }}" class="rounded overflow-hidden absolute shadow" style="top: 5rem; width: 600px;">
+            <div class="relative">
+                <input bind:value={search_value} bind:this={quick_search_input} class="bg-gray-100 dark:bg-gray-700 outline-none py-3 pr-4 pl-10 block appearance-none leading-normal w-full" type="search" placeholder="Search" />
+                <div class="pointer-events-none absolute inset-y-0 left-0 pl-3 flex items-center">
+                    <svg class="fill-current pointer-events-none w-5 h-5 opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M16.32 14.9l1.1 1.1c.4-.02.83.13 1.14.44l3 3a1.5 1.5 0 0 1-2.12 2.12l-3-3a1.5 1.5 0 0 1-.44-1.14l-1.1-1.1a8 8 0 1 1 1.41-1.41l.01-.01zM10 16a6 6 0 1 0 0-12 6 6 0 0 0 0 12z" />
+                    </svg>
+                </div>
+            </div>
+            <div class="results-list">
+                {#if searching}
+                    <div class="bg-gray-100 dark:bg-gray-700 flex justify-center pt-2 pb-4">
+                        <Loading />
+                    </div>
+                {:else}
+                    {#each search_results as {id, name, cover}}
+                        <a transition:slide href="/series/{id}/{slugify(name)}" class="bg-gray-100 dark:bg-gray-700 flex items-center relative px-4 pt-2 first-child:pt-3 pb-2 hover:bg-gray-200 dark:hover:bg-gray-800 h-16 relative" on:click={toggle_search}>
+                            <img class="w-12 rounded" src="{cdn(cover, { resize: '96,96' })}" alt="Cover for {name}"/>
+                            <div class="ml-4 overflow-hidden">
+                                <div class="font-semibold truncate">{name}</div>
+                                <div class="text-sm">Manga</div>
+                            </div>
+                        </a>
+                    {/each}
+                    <a href="/search{search_value !== '' ? `?name=${search_value}` : ''}" class="bg-gray-100 dark:bg-gray-700 flex items-center justify-center hover:bg-gray-200 dark:hover:bg-gray-800 text-sm py-2" on:click={toggle_search}>
+                        Advanced Search...
+                    </a>
+                {/if}
+            </div>
+        </div>
+    </div>
+{/if}
+
+<svelte:window on:keydown={listener} on:scroll={scroll} on:click={click} />
+
+<script>
+    import { onMount, tick } from 'svelte'
+    import { stores, goto } from '@sapper/app'
+    import Loading from '../Loading.svelte'
+    import Icon from '../Logos/Icon.svelte'
+    import { cdn } from 'cdn.js'
+    import { userSession, nav_height } from 'stores.js'
+    import { slugify } from 'filters.js'
+    import { slide, fade, fly } from 'svelte/transition'
+
+    $: search(search_value)
+
+    let quick_search = false
+    let search_value = ''
+    let controller = new AbortController()
+    let search_results = []
+    let searching = false
+    let nav_container
+    let scrollPos = 0
+    let quick_search_input
+    let quick_search_container
+    let dropdown_open = false
+    let trigger
+
+    const { session } = stores()
+
+    const listener = e => {
+    	if (e.key === "Escape") quick_search = false
+    }
+
+    const scroll = () => {
+    	if ((document.body.getBoundingClientRect()).top > scrollPos) {
+    		$nav_height = nav_container.offsetHeight
+		    nav_container.style = ''
+    	} else {
+    		$nav_height = 0
+    		nav_container.style = `top: -${nav_container.offsetHeight}px;`
+    	}
+	    scrollPos = (document.body.getBoundingClientRect()).top
+    }
+
+    const click = e => {
+    	if (!trigger) return
+    	if (e.target === trigger || trigger.contains(e.target)) dropdown_open = !dropdown_open
+    	else dropdown_open = false
+    }
+
+    const toggle_search = async () => {
+    	quick_search = !quick_search
+        
+    	if (quick_search) {
+    		await tick()
+    		quick_search_input.focus()
+    	}
+    }
+
+    const logout = async () => {
+    	await userSession.logout()
+    	goto('/')
+    }
+
+    const search = async value => {
+    	controller.abort()
+    	if (value === "") {
+    		search_results = []
+    		searching = false
+    		return
+    	}
+    	searching = true
+    	controller = new AbortController()
+    	const signal = controller.signal
+    	const response = await fetch(`https://api.manga.cat/v1/series?query=name__icontains:${value}&limit=5`, {signal})
+    	search_results = await response.json()
+    	searching = false
+    }
+
+    onMount(() => {
+    	document.documentElement.style = `margin-top: ${nav_container.offsetHeight}px;`
+
+    	return () => { document.documentElement.style = '' }
+    })
+</script>
+
+<style>
+    header { transition: top 0.5s ease 0s; }
+</style>

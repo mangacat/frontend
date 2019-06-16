@@ -1,0 +1,145 @@
+<div bind:this={trigger} class="fixed right-0 bottom-0 mr-6 mb-6 bg-gray-100 dark:bg-gray-700 rounded cursor-pointer z-50 overflow-hidden {menu_open ? '' : 'shadow-md'}">
+    <button class="p-2 hover:text-gray-600 dark:hover:text-gray-400 focus:outline-none" type="button">
+        <svg class="fill-current w-10 h-10 {typeof menu_open == 'boolean' ? (menu_open ? 'scale' : 'scale2') : ''}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            {#if menu_open}
+                <path d="M17.02 18.435L5.708 7.121a1 1 0 0 1 1.414-1.414l11.314 11.314a1 1 0 0 1-1.414 1.414z"/>
+                <path d="M5.707 17.02L17.021 5.708a1 1 0 1 1 1.414 1.414L7.12 18.435a1 1 0 1 1-1.414-1.414z"/>
+            {:else}
+                <path d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z"/>
+            {/if}
+        </svg>        
+    </button>
+</div>
+
+<div class="fixed right-0 bottom-0 mr-6 mb-6 bg-gray-100 dark:bg-gray-700 rounded shadow-md cursor-pointer z-40 overflow-hidden {typeof menu_open == 'boolean' ? (menu_open ? 'open' : 'closed') : ''}">
+    {#if menu_open}
+        <a href="/" class="p-3 hover:text-gray-600 dark:hover:text-gray-400" as="button">
+            <svg class="fill-current w-8 h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M13 20v-5h-2v5a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-7.59l-.3.3a1 1 0 1 1-1.4-1.42l9-9a1 1 0 0 1 1.4 0l9 9a1 1 0 0 1-1.4 1.42l-.3-.3V20a2 2 0 0 1-2 2h-3a2 2 0 0 1-2-2zm5 0v-9.59l-6-6-6 6V20h3v-5c0-1.1.9-2 2-2h2a2 2 0 0 1 2 2v5h3z"/>
+            </svg>
+        </a>
+        <a href="/trending" class="p-3 hover:text-gray-600 dark:hover:text-gray-400" as="button">
+            <svg class="fill-current w-8 h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M20 15a1 1 0 0 0 2 0V7a1 1 0 0 0-1-1h-8a1 1 0 0 0 0 2h5.59L13 13.59l-3.3-3.3a1 1 0 0 0-1.4 0l-6 6a1 1 0 0 0 1.4 1.42L9 12.4l3.3 3.3a1 1 0 0 0 1.4 0L20 9.4V15z" />
+            </svg>
+        </a>
+        <a href="/search" class="p-3 hover:text-gray-600 dark:hover:text-gray-400" as="button">
+            <svg class="fill-current w-8 h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M16.32 14.9l1.1 1.1c.4-.02.83.13 1.14.44l3 3a1.5 1.5 0 0 1-2.12 2.12l-3-3a1.5 1.5 0 0 1-.44-1.14l-1.1-1.1a8 8 0 1 1 1.41-1.41l.01-.01zM10 16a6 6 0 1 0 0-12 6 6 0 0 0 0 12z" />
+            </svg>
+        </a>
+        {#if $session.user}
+            <a href="/user/{$session.user.id}/{slugify($session.user.username)}" class="p-3 hover:text-gray-600 dark:hover:text-gray-400" as="button">
+                <svg class="fill-current w-8 h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M12 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-2a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm9 11a1 1 0 0 1-2 0v-2a3 3 0 0 0-3-3H8a3 3 0 0 0-3 3v2a1 1 0 0 1-2 0v-2a5 5 0 0 1 5-5h8a5 5 0 0 1 5 5v2z"/>
+                </svg>
+            </a>
+            <a href="/settings/profile" class="p-3 hover:text-gray-600 dark:hover:text-gray-400" as="button">
+                <svg class="fill-current w-8 h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M9 4.58V4c0-1.1.9-2 2-2h2a2 2 0 0 1 2 2v.58a8 8 0 0 1 1.92 1.11l.5-.29a2 2 0 0 1 2.74.73l1 1.74a2 2 0 0 1-.73 2.73l-.5.29a8.06 8.06 0 0 1 0 2.22l.5.3a2 2 0 0 1 .73 2.72l-1 1.74a2 2 0 0 1-2.73.73l-.5-.3A8 8 0 0 1 15 19.43V20a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2v-.58a8 8 0 0 1-1.92-1.11l-.5.29a2 2 0 0 1-2.74-.73l-1-1.74a2 2 0 0 1 .73-2.73l.5-.29a8.06 8.06 0 0 1 0-2.22l-.5-.3a2 2 0 0 1-.73-2.72l1-1.74a2 2 0 0 1 2.73-.73l.5.3A8 8 0 0 1 9 4.57zM7.88 7.64l-.54.51-1.77-1.02-1 1.74 1.76 1.01-.17.73a6.02 6.02 0 0 0 0 2.78l.17.73-1.76 1.01 1 1.74 1.77-1.02.54.51a6 6 0 0 0 2.4 1.4l.72.2V20h2v-2.04l.71-.2a6 6 0 0 0 2.41-1.4l.54-.51 1.77 1.02 1-1.74-1.76-1.01.17-.73a6.02 6.02 0 0 0 0-2.78l-.17-.73 1.76-1.01-1-1.74-1.77 1.02-.54-.51a6 6 0 0 0-2.4-1.4l-.72-.2V4h-2v2.04l-.71.2a6 6 0 0 0-2.41 1.4zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm0-2a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/>
+                </svg>
+            </a>
+        {:else}
+            <a href="/signup" class="p-3 hover:text-gray-600 dark:hover:text-gray-400" as="button">
+                <svg class="fill-current w-8 h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M19 10h2a1 1 0 0 1 0 2h-2v2a1 1 0 0 1-2 0v-2h-2a1 1 0 0 1 0-2h2V8a1 1 0 0 1 2 0v2zM9 12A5 5 0 1 1 9 2a5 5 0 0 1 0 10zm0-2a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm8 11a1 1 0 0 1-2 0v-2a3 3 0 0 0-3-3H7a3 3 0 0 0-3 3v2a1 1 0 0 1-2 0v-2a5 5 0 0 1 5-5h5a5 5 0 0 1 5 5v2z"/>
+                </svg>
+            </a>
+            <a href="/login" class="p-3 hover:text-gray-600 dark:hover:text-gray-400" as="button">
+                <svg class="fill-current w-8 h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M14.59 13H3a1 1 0 0 1 0-2h11.59l-3.3-3.3a1 1 0 0 1 1.42-1.4l5 5a1 1 0 0 1 0 1.4l-5 5a1 1 0 0 1-1.42-1.4l3.3-3.3zM17 21a1 1 0 0 1 0-2h3V5h-3a1 1 0 1 1 0-2h3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-3z"/>
+                </svg>
+            </a>
+        {/if}
+    {/if}
+</div>
+
+<svelte:window on:click={click}></svelte:window>
+
+<script>
+    import { stores } from '@sapper/app'
+    import { slugify } from 'filters.js'
+
+    const { session } = stores()
+
+    let menu_open
+    let trigger
+
+    const click = e => {
+    	if (!trigger) return
+    	if (e.target === trigger || trigger.contains(e.target)) menu_open = !menu_open
+    	else menu_open = false
+    }
+</script>
+
+<style lang="postcss">
+    .open {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        animation: upsize 0.2s ease; 
+        animation-fill-mode: both;
+    }
+
+    .closed {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        animation: downsize 0.2s ease; 
+        animation-fill-mode: both;
+    }
+
+    @keyframes upsize {
+        0% {
+            width: 3.5rem;
+            height: 3.5rem;
+        }
+        100% {
+            width: 10.5rem;
+            height: 7rem;
+        }
+    }
+
+    @keyframes downsize {
+        0% {
+            width: 10.5rem;
+            height: 7rem;
+        }
+        100% {
+            width: 3.5rem;
+            height: 3.5rem;
+        }
+    }
+
+    .scale {
+        animation: scale 0.2s ease;
+        animation-fill-mode: both;
+    }
+
+    .scale2 {
+        animation: scale2 0.2s ease;
+        animation-fill-mode: both;
+    }
+
+    @keyframes scale {
+        0% {
+            transform: scaleY(1);
+        }
+        50% {
+            transform: scaleY(0);
+        }
+        100% {
+            transform: scaleY(1);
+        }
+    }
+
+    @keyframes scale2 {
+        0% {
+            transform: scaleY(1);
+        }
+        50% {
+            transform: scaleY(0);
+        }
+        100% {
+            transform: scaleY(1);
+        }
+    }
+</style>

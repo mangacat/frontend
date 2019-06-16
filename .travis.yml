@@ -1,0 +1,13 @@
+language: node_js
+node_js:
+  - 12.4.0
+cache:
+  npm: true
+  directories:
+    - ~/.npm
+    - ~/.cache
+install:
+  - npm ci
+script:
+  - npm run lint
+  - npm test
