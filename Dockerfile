@@ -8,15 +8,20 @@ RUN apk update && apk add --virtual build-dependencies \
     git \
     python
 
-# install node dependencies
+# install dependencies
 WORKDIR /app
 COPY package.json package-lock.json ./
-RUN npm ci
+RUN npm ci --production
+
+###
+# Only copy over the Node pieces we need
+# ~> Saves 35MB
+###
+FROM mhart/alpine-node:slim-12
+
+WORKDIR /app
+COPY --from=0 /app .
 COPY . .
 
-# build sapper
-# RUN npm run build
-
 EXPOSE 3000
-CMD ["sh","-c", "npm run build && node __sapper__/build"]
-# CMD ["npm""node", "__sapper__/build"]
+CMD ["node", "__sapper__/build"]
