@@ -21,12 +21,11 @@ script:
 
 before_deploy:
   - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
+  - docker build -t registry.gitlab.com/mangash/manga-frontend .
 
 deploy:
   provider: script
-  script:
-    - docker build -t registry.gitlab.com/mangash/manga-frontend .
-    - docker push registry.gitlab.com/mangash/manga-frontend
+  script: docker push registry.gitlab.com/mangash/manga-frontend
   skip_cleanup: true
   on:
     branch: master
