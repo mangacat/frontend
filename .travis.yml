@@ -19,11 +19,14 @@ script:
   - npm test
   - npm run lint
 
+before_deploy:
+  - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
+
 deploy:
   provider: script
   script:
-    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
     - docker build -t registry.gitlab.com/mangash/manga-frontend .
     - docker push registry.gitlab.com/mangash/manga-frontend
+  skip_cleanup: true
   on:
     branch: master
