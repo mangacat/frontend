@@ -1,13 +1,26 @@
 language: node_js
+
 node_js:
   - 12.4.0
+
 cache:
   npm: true
   directories:
     - ~/.npm
     - ~/.cache
+
 install:
   - npm ci
+
 script:
   - npm test
   - npm run lint
+
+deploy:
+  provider: script
+  script:
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
+    - docker build -t registry.gitlab.com/mangash/manga-frontend .
+    - docker push registry.gitlab.com/mangash/manga-frontend
+  on:
+    branch: master
