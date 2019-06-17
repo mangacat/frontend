@@ -8,19 +8,18 @@ import bodyParser from 'body-parser'
 
 let store = undefined
 
-if (process.env.REDIS_HOST) {
-	const RedisStore = require('connect-redis')(session)
-	store = new RedisStore({
-		host: process.env.REDIS_HOST,
-		port: process.env.REDIS_PORT,
-		pass: process.env.REDIS_PASS
-	})
-}
-
-const { PORT, NODE_ENV, SENTRY_DSN } = process.env
+const { PORT, NODE_ENV, SENTRY_DSN, REDIS_HOST, REDIS_PORT, REDIS_PASS } = process.env
 const dev = NODE_ENV === 'development'
 
 if (!dev && SENTRY_DSN) Sentry.init({ dsn: SENTRY_DSN })
+if (!dev && REDIS_HOST) {
+	const RedisStore = require('connect-redis')(session)
+	store = new RedisStore({
+		host: REDIS_HOST,
+		port: REDIS_PORT,
+		pass: REDIS_PASS
+	})
+}
 
 polka()
 	.use(bodyParser.json())
