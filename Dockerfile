@@ -11,8 +11,7 @@ RUN apk update && apk add --virtual build-dependencies \
 # install node dependencies
 WORKDIR /app
 COPY package.json package-lock.json ./
-RUN npm install
-RUN npm install -g npm-run-all
+RUN npm ci
 COPY . .
 
 # build sapper
