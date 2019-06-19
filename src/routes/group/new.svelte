@@ -94,7 +94,7 @@
     	if (form_element.isValid) {
     		const data = serialize(form_element)
 
-    		const group = await api.post('https://api.manga.cat/v1/groups_scanlation', data, $session.user.token)
+    		const group = await api.post('groups_scanlation', data, $session.user.token)
             
     		goto(`/group/${group.id}/${slugify(group.name)}`)
     	}
