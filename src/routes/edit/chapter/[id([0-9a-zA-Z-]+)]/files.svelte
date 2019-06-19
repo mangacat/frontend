@@ -59,7 +59,7 @@
     import { chapter } from './chapter.js'
     import * as api from 'api.js'
     import { cdn } from 'cdn.js'
-    import Loading from '../../../../components/Loading.svelte'
+    import Loading from 'components/Loading.svelte'
 
     let dropzone 
     const { session } = stores()

@@ -171,9 +171,9 @@
     import { encode, decode } from 'qss'
     import { cdn } from 'cdn.js'
     import { slugify } from 'filters.js'
-    import Loading from '../components/Loading.svelte'
+    import Loading from 'components/Loading.svelte'
     import { slide } from 'svelte/transition'
-    import SearchMultipleSelect from '../components/SearchMultipleSelect.svelte'
+    import SearchMultipleSelect from 'components/SearchMultipleSelect.svelte'
     
     export let tags
 

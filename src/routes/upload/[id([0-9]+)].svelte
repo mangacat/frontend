@@ -75,7 +75,7 @@
 <script>
     import { goto, stores } from '@sapper/app'
     import { serialize } from 'formee'
-    import SearchMultipleSelect from '../../components/SearchMultipleSelect.svelte'
+    import SearchMultipleSelect from 'components/SearchMultipleSelect.svelte'
     import * as api from 'api.js'
 
 

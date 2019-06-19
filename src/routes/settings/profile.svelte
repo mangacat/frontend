@@ -49,7 +49,7 @@
     import { stores } from '@sapper/app'
     import { cdn } from 'cdn.js'
     import { userSession } from 'stores.js'
-    import Loading from '../../components/Loading.svelte'
+    import Loading from 'components/Loading.svelte'
 
     export let user
 

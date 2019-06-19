@@ -12,8 +12,8 @@
 	import { stores } from '@sapper/app'
 	import { onMount, tick } from 'svelte'
 	import { userSession } from 'stores.js'
-	import Nav from '../components/Nav.svelte'
-	import Footer from '../components/Footer.svelte'
+	import Nav from 'components/Nav.svelte'
+	import Footer from 'components/Footer.svelte'
 	
 	const { page, session } = stores()
 
