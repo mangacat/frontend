@@ -37,7 +37,7 @@ polka()
 		sirv('static', { dev, etag: true, maxAge: 31536000, immutable: true }),
 		sapper.middleware({
 			session: req => ({
-				user: req.session && req.session.user
+				user: req.session && Math.round(new Date().getTime() / 1000) - req.session.user.expiry < 0 && req.session.user
 			})
 		})
 	)
