@@ -39,6 +39,7 @@
     "@babel/preset-env": "^7.4.5",
     "@babel/runtime": "^7.4.5",
     "@fullhuman/postcss-purgecss": "^1.2.0",
+    "@tailwindcss/custom-forms": "^0.1.4",
     "babel-eslint": "^10.0.2",
     "clipboard-copy": "^3.0.0",
     "css-prefers-color-scheme": "^4.0.0",

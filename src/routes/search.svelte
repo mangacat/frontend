@@ -28,8 +28,10 @@
                     <SearchMultipleSelect bind:value={query.tags_inc} options="{tags.filter(x => !query.tags_exc.includes(x))}" filterFunction="{tagSearch}" searchProperty="name" />
                     <div class="capitalize mb-1 mt-4">exclude tags</div>
                     <SearchMultipleSelect bind:value={query.tags_exc} options="{tags.filter(x => !query.tags_inc.includes(x))}" filterFunction="{tagSearch}" searchProperty="name" />
-                    <!-- <div class="capitalize mb-1 mt-4">hentai (18+)</div>
-                    <ToggleInput v-model="searchParams.hentai" /> -->
+                    <label class="inline-flex items-center mb-1 mt-4">
+                        <input type="checkbox" class="form-checkbox h-4 w-4" bind:checked={query.hentai}>
+                        <span class="capitalize ml-2">hentai (18+)</span>
+                    </label>
                 </div>
             {/if}
         {/if}

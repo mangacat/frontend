@@ -27,6 +27,7 @@ module.exports = {
 		opacity: ['responsive', 'hover']
 	},
 	plugins: [
+		require('@tailwindcss/custom-forms'),
 		function({ addVariant, e }) {
 			addVariant('first-child', ({ modifySelectors, separator }) => {
 				modifySelectors(({ className }) => {
