@@ -36,12 +36,6 @@
 </div>
 
 <style lang="postcss">
-    .images {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, 150px);
-        grid-template-rows: repeat(auto-fill, 225px);
-        grid-gap: 0.5rem;
-    }
     .chapter {
         display: grid;
         grid-template-columns: 2rem 2rem 1fr 6rem;
