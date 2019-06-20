@@ -46,7 +46,7 @@
                         Login
                     </button>
                     <a href="/signup" class="inline-block align-baseline font-bold text-sm text-gray-600 hover:text-gray-500 dark:text-gray-200 dark:hover:text-gray-400 dark:focus:text-gray-400">
-                        Need an account? <u>Sign up</u>
+                        Need an account? <u>Register</u>
                     </a>
                 </div>
             </form>

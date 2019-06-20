@@ -1,5 +1,5 @@
 <svelte:head>
-    <title>Sign Up - MangaCat</title>
+    <title>Register - MangaCat</title>
     <script type="text/javascript">var recaptchaOnload = function() { grecaptcha.render('recaptcha', {'sitekey' : process.env.GOOGLE_RECAPTCHA_SITEKEY}) }</script>
 </svelte:head>
 
@@ -78,7 +78,7 @@
                 <div id="recaptcha" class="flex justify-center mb-4"></div>
                 <div class="flex items-center justify-between">
                     <button type="submit" disabled={submitting} class="hover:shadow bg-gray-400 hover:bg-gray-300 text-gray-700 dark:text-gray-200 dark:bg-gray-800 dark:hover:bg-gray-900 font-bold py-2 px-4 rounded outline-none focus:shadow-outline dark:focus:bg-gray-900">
-                        {submitting ? 'Submitting...' : 'Sign Up'}
+                        {submitting ? 'Submitting...' : 'Register'}
                     </button>
                     <a href="/login" class="inline-block align-baseline font-bold text-sm text-gray-600 hover:text-gray-500 dark:text-gray-200 dark:hover:text-gray-400 dark:focus:text-gray-400">
                         Have an account? <u>Login</u>
