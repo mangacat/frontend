@@ -19,7 +19,7 @@
     "node": ">= 12"
   },
   "dependencies": {
-    "@sentry/browser": "^5.4.0",
+    "@sentry/browser": "^5.4.2",
     "@sentry/node": "^5.4.2",
     "body-parser": "^1.19.0",
     "connect-redis": "^3.4.1",
