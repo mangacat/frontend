@@ -4,7 +4,7 @@
 
 <div class="min-h-screen">
     <div class="w-full max-w-sm lg:max-w-2xl lg:flex mx-auto mt-24 shadow-md rounded overflow-hidden mx-2">
-        <div class="hidden lg:block w-1/2 bg-cover bg-center" style="{width > 1024 ? `background-image: url(${cdn(wallpaper())});` : '' }" />
+        <div class="hidden lg:block w-1/2 bg-cover bg-center" style="{width > 1024 ? `background-image: url(${cdn(wallpaper(), { w: 1000 })});` : '' }" />
         <div class="lg:w-1/2 bg-white dark:bg-gray-700 px-8 pt-6 pb-8">
             <form bind:this={form_element} on:submit|preventDefault={submit}>
                 {#if errors.response}
