@@ -14,5 +14,9 @@ readFile('./static/css/app.css', (_, data) => {
 		writeFile(`./__sapper__/build/template.html`, data.replace('app.css', `app.${digest}.css`), catchErr)
 	})
 
+	readFile('./__sapper__/build/service-worker.js', 'utf8', (_, data) => {
+		writeFile(`./__sapper__/build/service-worker.js`, data.replace('app.css', `app.${digest}.css`), catchErr)
+	})
+
 	unlink('./static/css/app.css', catchErr)
 })
