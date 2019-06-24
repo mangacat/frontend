@@ -7,7 +7,7 @@
   "license": "GPL-3.0",
   "scripts": {
     "dev": "sapper dev",
-    "build": "NODE_ENV=production sapper build --legacy",
+    "build": "NODE_ENV=production sapper build --legacy && node ./scripts/hashCssFile",
     "export": "sapper export --legacy",
     "start": "node __sapper__/build",
     "cy:run": "cypress run",
