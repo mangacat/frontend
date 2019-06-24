@@ -43,7 +43,7 @@ export default {
 			}),
 			postcss({
 				plugins,
-				extract: 'static/css/app.css'
+				extract: './static/css/app.css'
 			}),
 			resolve({ browser: true }),
 			commonjs(),
