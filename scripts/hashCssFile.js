@@ -1,22 +1,17 @@
 const { createHash } = require('crypto')
-const { readFile, writeFile, unlink } = require('fs')
+const { readFileSync, writeFileSync, unlinkSync } = require('fs')
 
-let digest = ''
-const hash = createHash('sha256')
-const catchErr = err => { if (err) throw err }
+const css = readFileSync('./static/css/app.css', { encoding: 'utf8' })
+const destFile = `app.${createHash('md5').update(css).digest('hex').substring(0, 8)}.css`
 
-readFile('./static/css/app.css', (_, data) => {
-	hash.update(data)
-	digest = hash.digest('hex').substring(0, 8)
-	writeFile(`./static/css/app.${digest}.css`, data, catchErr)
+const replaceInFile = (file, str1, str2) => {
+	const orig = readFileSync(file, { encoding: 'utf8' })
+	writeFileSync(file, orig.replace(str1, str2))
+}
 
-	readFile('./__sapper__/build/template.html', 'utf8', (_, data) => {
-		writeFile(`./__sapper__/build/template.html`, data.replace('app.css', `app.${digest}.css`), catchErr)
-	})
+writeFileSync(`./static/css/${destFile}`, css)
 
-	readFile('./__sapper__/build/service-worker.js', 'utf8', (_, data) => {
-		writeFile(`./__sapper__/build/service-worker.js`, data.replace('app.css', `app.${digest}.css`), catchErr)
-	})
+replaceInFile('./__sapper__/build/template.html', 'app.css', destFile)
+replaceInFile('./__sapper__/build/service-worker.js', 'app.css', destFile)
 
-	unlink('./static/css/app.css', catchErr)
-})
+unlinkSync('./static/css/app.css')
