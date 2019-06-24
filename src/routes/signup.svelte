@@ -99,6 +99,7 @@
 
 <script>
     import { onMount } from 'svelte'
+    import { goto } from '@sapper/app'
     import { cdn } from 'cdn.js'
     import { validate, serialize } from 'formee'
     import { userSession } from 'stores.js'
@@ -173,20 +174,16 @@
     			return
     		}
 
-    		let response
-            
     		try {
-    			response = await userSession.register(data)
+    		    await userSession.register(data)
     		} catch (err) {
-    			console.log(err) // eslint-disable-line no-console
     			submitting = false
     			return
     		}
-
-    		console.log(response) // eslint-disable-line no-console
     	}
         
     	submitting = false
+    	goto('/')
     }
 
     onMount(() => {
