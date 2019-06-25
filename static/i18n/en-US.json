@@ -1,6 +1,13 @@
 {
-	"nav": {
-		"sign_in": "Sign In",
-		"create_account": "Create Account"
-	}
+	"login": "login",
+	"register": "register",
+	"profile": "profile",
+	"settings": "settings",
+	"logout": "logout",
+	"terms": "terms",
+	"privacy": "privacy",
+	"advanced_search": "advanced search",
+	"select": "select",
+	"no_results": "no results found for {term}",
+	"search": "search"
 }
