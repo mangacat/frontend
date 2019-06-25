@@ -21,7 +21,7 @@ const preprocess = sveltePreprocess({
 	}
 })
 
-const onwarn = (warning, onwarn) => (warning.code === 'CIRCULAR_DEPENDENCY' &&  /[/\\]@sapper[/\\]/.test(warning.message)) || onwarn(warning)
+const onwarn = (warning, onwarn) => warning.code === 'THIS_IS_UNDEFINED' || (warning.code === 'CIRCULAR_DEPENDENCY' &&  /[/\\]@sapper[/\\]/.test(warning.message)) || onwarn(warning)
 
 export default {
 	client: {
