@@ -1,4 +1,3 @@
-import './css/tailwind.pcss'
 import * as sapper from '@sapper/app'
 import * as Sentry from '@sentry/browser'
 import { locale, dictionary } from 'svelte-i18n'
