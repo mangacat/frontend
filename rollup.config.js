@@ -65,10 +65,7 @@ export default {
 				]
 			}),
 
-			!dev && terser({
-				module: true,
-				numWorkers: 1
-			}),
+			!dev && terser({ module: true }),
 		],
 		onwarn
 	},
@@ -110,7 +107,7 @@ export default {
 				'process.env.NODE_ENV': JSON.stringify(mode)
 			}),
 			commonjs(),
-			!dev && terser({ numWorkers: 1 })
+			!dev && terser()
 		],
 		onwarn
 	}
