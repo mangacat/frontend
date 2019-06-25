@@ -1,13 +1,13 @@
 {
-	"login": "login",
-	"register": "register",
-	"profile": "profile",
-	"settings": "settings",
-	"logout": "logout",
-	"terms": "terms",
-	"privacy": "privacy",
 	"advanced_search": "advanced search",
-	"select": "select",
+	"login": "login",
+	"logout": "logout",
 	"no_results": "no results found for {term}",
-	"search": "search"
+	"privacy": "privacy",
+	"profile": "profile",
+	"register": "register",
+	"search": "search",
+	"select": "select",
+	"settings": "settings",
+	"terms": "terms"
 }
