@@ -17,7 +17,7 @@
                         {:else}
                             {people.about.substr(0, 150)}...
                         {/if}
-                        <button class="font-bold" on:click={_ => {about_expanded = !about_expanded}}>
+                        <button class="font-bold" on:click={() => {about_expanded = !about_expanded}}>
                             {about_expanded ? 'less' : 'more'}
                         </button>
                     </div>
@@ -84,7 +84,7 @@
                     {:else}
                         {people.about.substr(0, 100)}...
                     {/if}
-                    <button class="font-bold" on:click={_ => {about_expanded = !about_expanded}}>
+                    <button class="font-bold" on:click={() => {about_expanded = !about_expanded}}>
                         {about_expanded ? 'less' : 'more'}
                     </button>
                 </div>

@@ -1,11 +1,11 @@
 <svelte:head>
-    <title>{webpub['metadata']['title']} ({webpub['metadata']['belongsTo']['series']['name']}) - MangaCat</title>
+    <title>{webpub['metadata']['title']} ({webpub['metadata']['belongsTo']['series'][0]['name']}) - MangaCat</title>
 
     <meta property="og:image" content="{webpub['metadata']['image']}">
     <meta property="og:description" content="{webpub['metadata']['description']}">
 
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" crossorigin="anonymous">
-	<link rel="stylesheet" href="https://unpkg.com/xbreader@0.29.0/dist/xbstyles.css" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://unpkg.com/xbreader@0.29.1/dist/xbstyles.css" crossorigin="anonymous">
 </svelte:head>
 
 <div bind:this={xbreader}>
@@ -43,7 +43,7 @@
 		document.documentElement.className = ''
 
 		const e = document.createElement('script')
-		e.src = 'https://unpkg.com/xbreader@0.29.0/dist/xbreader-en.js'
+		e.src = 'https://unpkg.com/xbreader@0.29.1/dist/xbreader-en.js'
 		document.head.appendChild(e)
 
 		let destructor

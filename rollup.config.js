@@ -2,7 +2,6 @@ import 'dotenv/config'
 import pkg from './package.json'
 import babel from 'rollup-plugin-babel'
 import svelte from 'rollup-plugin-svelte'
-import postcss from 'rollup-plugin-postcss'
 import replace from 'rollup-plugin-replace'
 import config from 'sapper/config/rollup.js'
 import { terser } from 'rollup-plugin-terser'
@@ -41,10 +40,6 @@ export default {
 				preprocess,
 				hydratable: true
 			}),
-			postcss({
-				plugins,
-				extract: 'static/css/app.css'
-			}),
 			resolve({ browser: true }),
 			commonjs(),
 
@@ -65,10 +60,7 @@ export default {
 				]
 			}),
 
-			!dev && terser({
-				module: true,
-				numWorkers: 1
-			}),
+			!dev && terser({ module: true }),
 		],
 		onwarn
 	},
@@ -110,7 +102,7 @@ export default {
 				'process.env.NODE_ENV': JSON.stringify(mode)
 			}),
 			commonjs(),
-			!dev && terser({ numWorkers: 1 })
+			!dev && terser()
 		],
 		onwarn
 	}

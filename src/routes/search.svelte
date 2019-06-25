@@ -17,30 +17,30 @@
                 </button>
             {/if}
         </div>
-        {#if ready}
-            {#if width >= 1024 || filters}
-                <div transition:slide="{{ duration: 400 }}">
-                    <div class="capitalize mb-1 mt-4">status</div>
-                    <SearchMultipleSelect bind:value={query.status} options={['Completed', 'Releasing', 'Hiatus', 'Cancelled']} />
-                    <div class="capitalize mb-1 mt-4">country</div>
-                    <SearchMultipleSelect bind:value={query.country} options={['Japan', 'China', 'Korea', 'Thailand', 'Vietnam', 'Philippines', 'Indonesia']} />
-                    <div class="capitalize mb-1 mt-4">include tags</div>
-                    <SearchMultipleSelect bind:value={query.tags_inc} options="{tags.filter(x => !query.tags_exc.includes(x))}" filterFunction="{tagSearch}" searchProperty="name" />
-                    <div class="capitalize mb-1 mt-4">exclude tags</div>
-                    <SearchMultipleSelect bind:value={query.tags_exc} options="{tags.filter(x => !query.tags_inc.includes(x))}" filterFunction="{tagSearch}" searchProperty="name" />
-                    <!-- <div class="capitalize mb-1 mt-4">hentai (18+)</div>
-                    <ToggleInput v-model="searchParams.hentai" /> -->
-                </div>
-            {/if}
+        {#if width >= 1024 || filters}
+            <div transition:slide="{{ duration: 400 }}">
+                <div class="capitalize mb-1 mt-4">status</div>
+                <SearchMultipleSelect bind:value={query.status} options={['Completed', 'Releasing', 'Hiatus', 'Cancelled']} />
+                <div class="capitalize mb-1 mt-4">country</div>
+                <SearchMultipleSelect bind:value={query.country} options={['Japan', 'China', 'Korea', 'Thailand', 'Vietnam', 'Philippines', 'Indonesia']} />
+                <div class="capitalize mb-1 mt-4">include tags</div>
+                <SearchMultipleSelect bind:value={query.tags_inc} options="{tags.filter(x => !query.tags_exc.includes(x))}" filterFunction="{tagSearch}" searchProperty="name" />
+                <div class="capitalize mb-1 mt-4">exclude tags</div>
+                <SearchMultipleSelect bind:value={query.tags_exc} options="{tags.filter(x => !query.tags_inc.includes(x))}" filterFunction="{tagSearch}" searchProperty="name" />
+                <label class="inline-flex items-center mb-1 mt-4">
+                    <input type="checkbox" class="form-checkbox h-4 w-4" bind:checked={query.hentai}>
+                    <span class="capitalize ml-2">hentai (18+)</span>
+                </label>
+            </div>
         {/if}
     </div>
     <div class="mb-8">
-        {#if searching}
+        {#await process(query)}
                 <div class="flex justify-center pt-2 pb-4">
                     <Loading />
                 </div>
-        {:else}
-            {#if results.length == 0}
+        {:then results}
+            {#if results.length === 0}
                 <div class="mt-4 text-center">
                     <div class="text-xl">
                         (╯°□°）╯︵ ┻━┻
@@ -102,7 +102,7 @@
                     {/each}
                 </div>
             {/if}
-        {/if}
+        {/await}
     </div>
   </div>
 
@@ -179,9 +179,6 @@
 
     let controller
     let active = -1
-    let results = []
-    let ready = false
-    let searching = false
     let width
     let filters = false
 
@@ -193,8 +190,6 @@
     	tags_inc: [],
     	hentai: false
     }
-
-    $: process(query)
 
     const removeFalsy = obj => {
     	const newObj = {}
@@ -216,12 +211,10 @@
     const tagSearch = (search, options) => { return options.filter(elem => elem.name.toLowerCase().includes(search.toLowerCase())) }
 
     const process = async () => {
-    	if (!ready) return
-        
-    	controller.abort()
+    	if (typeof window === 'undefined') return []
+    	if (controller) controller.abort()
 
     	active = -1
-    	searching = true
 
     	const encoded_query = encode(removeFalsy({...query, tags_inc: query['tags_inc'].map(x => x.name), tags_exc: query['tags_exc'].map(x => x.name)}), '?') !== '?' 
     		? encode(removeFalsy(convertArraysToString({...query, tags_inc: query['tags_inc'].map(x => x.name), tags_exc: query['tags_exc'].map(x => x.name)})), '?')
@@ -251,8 +244,7 @@
     	controller = new AbortController()
     	const signal = controller.signal
     	const response = await fetch(`https://api.manga.cat/v1/series${encode(removeFalsy(api_data), '?')}`, {signal})
-    	results = await response.json()
-    	searching = false
+    	return await response.json()
     }
 
     onMount(() => {
@@ -273,15 +265,10 @@
     		})
     	}
 
-    	ready = true
     	controller = new AbortController()
 
     	const initial_query = encode(removeFalsy(query), '?')
 
-    	if (initial_query !== "?") {
-    		window.history.pushState({}, '', `search${encode(removeFalsy(query), '?').replace(new RegExp('%2C', 'g'), ',')}`)
-    	} else {
-    		process(query)
-    	}
+    	if (initial_query !== "?") window.history.pushState({}, '', `search${initial_query.replace(new RegExp('%2C', 'g'), ',')}`)
     })
 </script>

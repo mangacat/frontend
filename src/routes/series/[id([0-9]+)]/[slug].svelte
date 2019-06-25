@@ -207,26 +207,7 @@
                     {/if}
                 </h2>
                 {#each series.chapters as chapter}
-                    <div class="flex py-2 border-b border-gray-500 dark:border-gray-600">
-                        <div class="flex-grow">
-                            <div>Vol. 1 Ch. 1 - The Sugar Girl Eats Love</div>
-                            <div class="text-sm">1 year • Waterflame Scanlations</div>
-                        </div>
-                        <div class="flex-grow-0" style="width: 80px;">
-                            <div class="flex items-center tabular-nums">
-                                <svg class="fill-current h-3 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
-                                    <path d="M572.52 241.4C518.29 135.59 410.93 64 288 64S57.68 135.64 3.48 241.41a32.35 32.35 0 0 0 0 29.19C57.71 376.41 165.07 448 288 448s230.32-71.64 284.52-177.41a32.35 32.35 0 0 0 0-29.19zM288 400a144 144 0 1 1 144-144 143.93 143.93 0 0 1-144 144zm0-240a95.31 95.31 0 0 0-25.31 3.79 47.85 47.85 0 0 1-66.9 66.9A95.78 95.78 0 1 0 288 160z" />
-                                </svg>
-                                12,563
-                            </div>
-                            <div class="flex items-center tabular-nums">
-                                <svg class="fill-current h-3 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
-                                    <path d="M416 192c0-88.4-93.1-160-208-160S0 103.6 0 192c0 34.3 14.1 65.9 38 92-13.4 30.2-35.5 54.2-35.8 54.5-2.2 2.3-2.8 5.7-1.5 8.7S4.8 352 8 352c36.6 0 66.9-12.3 88.7-25 32.2 15.7 70.3 25 111.3 25 114.9 0 208-71.6 208-160zm122 220c23.9-26 38-57.7 38-92 0-66.9-53.5-124.2-129.3-148.1.9 6.6 1.3 13.3 1.3 20.1 0 105.9-107.7 192-240 192-10.8 0-21.3-.8-31.7-1.9C207.8 439.6 281.8 480 368 480c41 0 79.1-9.2 111.3-25 21.8 12.7 52.1 25 88.7 25 3.2 0 6.1-1.9 7.3-4.8 1.3-2.9.7-6.3-1.5-8.7-.3-.3-22.4-24.2-35.8-54.5z" />
-                                </svg>
-                                100
-                            </div>
-                        </div>
-                    </div>
+                    <Chapter {chapter} />
                 {/each}
             </div>
         {/if}
@@ -250,6 +231,7 @@
     import { slugify } from 'filters.js'
     import { stores } from '@sapper/app'
     import { nav_height } from 'stores.js'
+    import Chapter from 'components/Chapter.svelte'
 
     const { session } = stores()
 

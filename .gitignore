@@ -1,8 +1,7 @@
 .env
 .DS_Store
-/node_modules
-!/src/node_modules/
+/node_modules/
 /src/node_modules/@sapper/
 /test/screenshots/
 /__sapper__/
-/static/css/app.css
+/static/css/

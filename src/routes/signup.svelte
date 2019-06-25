@@ -1,11 +1,11 @@
 <svelte:head>
-    <title>Sign Up - MangaCat</title>
+    <title>Register - MangaCat</title>
     <script type="text/javascript">var recaptchaOnload = function() { grecaptcha.render('recaptcha', {'sitekey' : process.env.GOOGLE_RECAPTCHA_SITEKEY}) }</script>
 </svelte:head>
 
 <div class="min-h-screen">
     <div class="w-full max-w-sm lg:max-w-2xl lg:flex mx-auto mt-24 shadow-md rounded overflow-hidden mx-2">
-        <div class="hidden lg:block w-1/2 bg-cover bg-center" style="{width > 1024 ? `background-image: url(${cdn('https://files.catbox.moe/cqqax7.png')});` : '' }" />
+        <div class="hidden lg:block w-1/2 bg-cover bg-center" style="{width >= 1024 ? `background-image: url(${cdn(img, { w: 1000 })});` : '' }" />
         <div class="lg:w-1/2 bg-white dark:bg-gray-700 px-8 pt-6 pb-8">
             <form bind:this={form_element} on:submit|preventDefault={submit}>
                 <div class="mb-4">
@@ -78,7 +78,7 @@
                 <div id="recaptcha" class="flex justify-center mb-4"></div>
                 <div class="flex items-center justify-between">
                     <button type="submit" disabled={submitting} class="hover:shadow bg-gray-400 hover:bg-gray-300 text-gray-700 dark:text-gray-200 dark:bg-gray-800 dark:hover:bg-gray-900 font-bold py-2 px-4 rounded outline-none focus:shadow-outline dark:focus:bg-gray-900">
-                        {submitting ? 'Submitting...' : 'Sign Up'}
+                        {submitting ? 'Submitting...' : 'Register'}
                     </button>
                     <a href="/login" class="inline-block align-baseline font-bold text-sm text-gray-600 hover:text-gray-500 dark:text-gray-200 dark:hover:text-gray-400 dark:focus:text-gray-400">
                         Have an account? <u>Login</u>
@@ -99,9 +99,11 @@
 
 <script>
     import { onMount } from 'svelte'
+    import { goto } from '@sapper/app'
     import { cdn } from 'cdn.js'
     import { validate, serialize } from 'formee'
     import { userSession } from 'stores.js'
+    import { wallpaper } from 'wallpaper.js'
 
     let password_visibilty = false
     let password_elem
@@ -111,6 +113,7 @@
     let errors = {}
     let submitting = false
     let width
+    const img = wallpaper()
     
     const form_rules = {
     	username(val) {
@@ -171,20 +174,16 @@
     			return
     		}
 
-    		let response
-            
     		try {
-    			response = await userSession.register(data)
+    		    await userSession.register(data)
     		} catch (err) {
-    			console.log(err) // eslint-disable-line no-console
     			submitting = false
     			return
     		}
-
-    		console.log(response) // eslint-disable-line no-console
     	}
         
     	submitting = false
+    	goto('/')
     }
 
     onMount(() => {
