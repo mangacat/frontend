@@ -42,6 +42,10 @@ self.addEventListener('fetch', event => {
 	// ignore dev server requests
 	if (url.hostname === self.location.hostname && url.port !== self.location.port) return
 
+	// ignore api requests
+	// TODO: fix the request signal not aborting the fetch and then remove this
+	if (url.hostname.startsWith('api')) return
+
 	// always serve static files and bundler-generated assets from cache
 	if (cached.has(event.request.url)) {
 		event.respondWith(caches.match(event.request))
