@@ -1,7 +1,6 @@
 <svelte:head>
     <title>Register - MangaCat</title>
-    <script src="https://www.google.com/recaptcha/api.js?onload=recaptchaOnload&render=explicit" async defer></script>
-    <script type="text/javascript">var recaptchaOnload = function() { grecaptcha.render('recaptcha', { 'sitekey' : process.env.GOOGLE_RECAPTCHA_SITEKEY }) }</script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </svelte:head>
 
 <div class="min-h-screen">
@@ -76,7 +75,7 @@
                         <p class="text-sm text-red-600 dark:text-red-400 mt-1">{errors.confirmed_password}</p>
                     {/if}
                 </div>
-                <div id="recaptcha" class="flex justify-center mb-4"></div>
+                <div class="g-recaptcha flex justify-center mb-4" data-sitekey="{process.env.GOOGLE_RECAPTCHA_SITEKEY}"></div>
                 <div class="flex items-center justify-between">
                     <button type="submit" disabled={submitting} class="hover:shadow bg-gray-400 hover:bg-gray-300 text-gray-700 dark:text-gray-200 dark:bg-gray-800 dark:hover:bg-gray-900 font-bold py-2 px-4 rounded outline-none focus:shadow-outline dark:focus:bg-gray-900">
                         {submitting ? 'Submitting...' : 'Register'}

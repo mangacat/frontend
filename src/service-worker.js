@@ -46,6 +46,9 @@ self.addEventListener('fetch', event => {
 	// TODO: fix the request signal not aborting the fetch and then remove this
 	if (url.hostname.startsWith('api')) return
 
+	// ignore google requests
+	if (url.hostname.startsWith('google')) return
+
 	// always serve static files and bundler-generated assets from cache
 	if (cached.has(event.request.url)) {
 		event.respondWith(caches.match(event.request))
