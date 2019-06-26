@@ -24,7 +24,7 @@
 </script>
 
 <script>
-    import { slugify } from 'filters.js'
+    import { slugify } from 'utils.js'
     import Chapter from 'components/Chapter.svelte'
 
     export let chapters

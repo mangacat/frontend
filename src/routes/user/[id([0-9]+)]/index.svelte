@@ -1,5 +1,5 @@
 <script context="module">
-	import { slugify } from 'filters.js'
+	import { slugify } from 'utils.js'
 	import * as api from 'api.js'
 
 	export async function preload({ params }, { user }) {

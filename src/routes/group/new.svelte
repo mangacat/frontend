@@ -71,7 +71,7 @@
 
 <script>
     import { validate, serialize } from 'formee'
-    import { slugify } from 'filters.js'
+    import { slugify } from 'utils.js'
     import { goto, stores } from '@sapper/app'
     import * as api from 'api.js'
 

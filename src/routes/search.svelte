@@ -170,7 +170,7 @@
     import { onMount } from 'svelte'
     import { encode, decode } from 'qss'
     import { cdn } from 'cdn.js'
-    import { slugify } from 'filters.js'
+    import { slugify } from 'utils.js'
     import Loading from 'components/Loading.svelte'
     import { slide } from 'svelte/transition'
     import SearchMultipleSelect from 'components/SearchMultipleSelect.svelte'

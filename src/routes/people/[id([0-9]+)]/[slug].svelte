@@ -115,7 +115,7 @@
 
 <script>
     import { cdn } from 'cdn.js'
-    import { slugify } from 'filters.js'
+    import { slugify } from 'utils.js'
 
     export let people
     let width

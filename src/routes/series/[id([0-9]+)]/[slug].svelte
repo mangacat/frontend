@@ -228,7 +228,7 @@
 
 <script>
     import { cdn } from 'cdn.js'
-    import { slugify } from 'filters.js'
+    import { slugify } from 'utils.js'
     import { stores } from '@sapper/app'
     import { nav_height } from 'stores.js'
     import Chapter from 'components/Chapter.svelte'

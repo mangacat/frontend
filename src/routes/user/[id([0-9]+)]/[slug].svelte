@@ -53,7 +53,7 @@
 
 <script>
     import { cdn } from 'cdn.js'
-    import { timeAgo } from 'filters.js'
+    import { timeAgo } from 'utils.js'
     import { stores } from '@sapper/app'
 
     export let user
