@@ -170,7 +170,7 @@
     import { onMount } from 'svelte'
     import { encode, decode } from 'qss'
     import { cdn } from 'cdn.js'
-    import { slugify } from 'utils.js'
+    import { slugify, removeFalsy } from 'utils.js'
     import Loading from 'components/Loading.svelte'
     import { slide } from 'svelte/transition'
     import SearchMultipleSelect from 'components/SearchMultipleSelect.svelte'
@@ -189,14 +189,6 @@
     	tags_exc: [],
     	tags_inc: [],
     	hentai: false
-    }
-
-    const removeFalsy = obj => {
-    	const newObj = {}
-    	Object.keys(obj).forEach(prop => {
-    		if (obj[prop] || typeof obj[prop] == 'boolean') newObj[prop] = obj[prop]
-    	})
-    	return newObj
     }
 
     const convertArraysToString = obj => {
