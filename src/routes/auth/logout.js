@@ -1,5 +1,5 @@
 export function post(req, res, next) {
-	delete req.session.destroy(err => {
+	req.session.destroy(err => {
 		if (err) {
 			console.log(err) // eslint-disable-line no-console
 			return next(err)
