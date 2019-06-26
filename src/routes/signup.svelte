@@ -1,6 +1,7 @@
 <svelte:head>
     <title>Register - MangaCat</title>
-    <script type="text/javascript">var recaptchaOnload = function() { grecaptcha.render('recaptcha', {'sitekey' : process.env.GOOGLE_RECAPTCHA_SITEKEY}) }</script>
+    <script src="https://www.google.com/recaptcha/api.js?onload=recaptchaOnload&render=explicit" async defer></script>
+    <script type="text/javascript">var recaptchaOnload = function() { grecaptcha.render('recaptcha', { 'sitekey' : process.env.GOOGLE_RECAPTCHA_SITEKEY }) }</script>
 </svelte:head>
 
 <div class="min-h-screen">
@@ -98,7 +99,6 @@
 </script>
 
 <script>
-    import { onMount } from 'svelte'
     import { goto } from '@sapper/app'
     import { cdn } from 'cdn.js'
     import { validate, serialize } from 'formee'
@@ -185,12 +185,4 @@
     	submitting = false
     	goto('/')
     }
-
-    onMount(() => {
-    	const e = document.createElement('script')
-    	e.src = 'https://www.google.com/recaptcha/api.js?onload=recaptchaOnload&render=explicit'
-    	document.head.appendChild(e)
-
-    	return () => { document.head.removeChild(e) }
-    })
 </script>
