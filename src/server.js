@@ -8,7 +8,7 @@ import bodyParser from 'body-parser'
 
 let store = undefined
 
-const { PORT, NODE_ENV, SENTRY_DSN, REDIS_HOST, REDIS_PORT, REDIS_PASS } = process.env
+const { PORT, NODE_ENV, SENTRY_DSN, REDIS_HOST, REDIS_PORT, REDIS_PASS, SESSION_SECRET } = process.env
 const dev = NODE_ENV === 'development'
 
 if (!dev && SENTRY_DSN) Sentry.init({ dsn: SENTRY_DSN })
@@ -25,19 +25,19 @@ polka()
 	.use(bodyParser.json())
 	.use(session({
 		store,
-		secret: 'urwaifuisntreal',
+		secret: SESSION_SECRET,
 		cookie: {
 			maxAge: 31536000
 		},
 		resave: false,
-		saveUninitialized: true
+		saveUninitialized: false
 	}))
 	.use(
 		shrinkRayCurrent(),
 		sirv('static', { dev, etag: true, maxAge: 31536000, immutable: true }),
 		sapper.middleware({
 			session: req => ({
-				user: req.session && req.session.user && Math.round(new Date().getTime() / 1000) - req.session.user.expiry < 0 && req.session.user
+				user: req.session && req.session.user
 			})
 		})
 	)
