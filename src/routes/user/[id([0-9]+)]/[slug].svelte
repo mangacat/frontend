@@ -24,7 +24,7 @@
                 {#if $session.user && $session.user.id === user.id}
                     <div class="flex-grow-0 flex items-center">
                         <a href="/settings/profile" class="uppercase tracking-wide bg-gray-400 hover:bg-gray-300 text-gray-700 dark:text-gray-200 dark:bg-gray-800 dark:hover:bg-gray-900 font-bold py-1 px-2 rounded outline-none focus:shadow-outline dark:focus:bg-gray-900 text-sm self-end mr-4 md:mr-8 shadow-md">
-                            {#if width < 768}
+                            {#if $medQ}
                                 <svg class="fill-current w-4 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M3.94 6.5L2.22 3.64l1.42-1.42L6.5 3.94c.52-.3 1.1-.54 1.7-.7L9 0h2l.8 3.24c.6.16 1.18.4 1.7.7l2.86-1.72 1.42 1.42-1.72 2.86c.3.52.54 1.1.7 1.7L20 9v2l-3.24.8c-.16.6-.4 1.18-.7 1.7l1.72 2.86-1.42 1.42-2.86-1.72c-.52.3-1.1.54-1.7.7L11 20H9l-.8-3.24c-.6-.16-1.18-.4-1.7-.7l-2.86 1.72-1.42-1.42 1.72-2.86c-.3-.52-.54-1.1-.7-1.7L0 11V9l3.24-.8c.16-.6.4-1.18.7-1.7zM10 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
                             {:else}
                                 edit profile
@@ -36,8 +36,6 @@
         </div>
     </div>
 </div>
-
-<svelte:window bind:innerWidth={width} />
 
 <script context="module">
     import * as api from 'api.js'
@@ -53,12 +51,12 @@
 
 <script>
     import { cdn } from 'cdn.js'
-    import { timeAgo } from 'utils.js'
+    import { timeAgo, mediaQuery } from 'utils.js'
     import { stores } from '@sapper/app'
 
     export let user
     
-    let width
+    const medQ = mediaQuery('(max-width: 768px)')
 
     const { session } = stores()
 </script>

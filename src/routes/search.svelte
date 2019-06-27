@@ -1,6 +1,6 @@
 <div class="min-h-screen mt-6 px-4 search max-w-9xl mx-auto">
     <div>
-        <div class="{width < 1024 ? 'search-input' : ''}">
+        <div class="{!$medQ ? 'search-input' : ''}">
             <div class="relative">
                 <input bind:value={query.name} class="focus:outline-none focus:shadow-outline focus:shadow-md shadow bg-white dark:bg-gray-700 rounded py-2 pr-4 pl-10 block appearance-none leading-normal w-full" type="search" placeholder="Search" />
                 <div class="pointer-events-none absolute inset-y-0 left-0 pl-3 flex items-center">
@@ -9,7 +9,7 @@
                     </svg>
                 </div>
             </div>
-            {#if width < 1024}
+            {#if !$medQ}
                 <button class="bg-white dark:bg-gray-700 rounded px-2 focus:outline-none focus:shadow-outline shadow" on:click="{() => { filters = !filters }}">
                     <svg class="h-full w-full fill-current" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                         <path d="M4 5h16a1 1 0 1 1 0 2H4a1 1 0 0 1 0-2zm3 6h10a1 1 0 0 1 0 2H7a1 1 0 0 1 0-2zm3 6h4a1 1 0 0 1 0 2h-4a1 1 0 0 1 0-2z" />
@@ -17,7 +17,7 @@
                 </button>
             {/if}
         </div>
-        {#if width >= 1024 || filters}
+        {#if $medQ || filters}
             <div transition:slide="{{ duration: 400 }}">
                 <div class="capitalize mb-1 mt-4">status</div>
                 <SearchMultipleSelect bind:value={query.status} options={['Completed', 'Releasing', 'Hiatus', 'Cancelled']} />
@@ -164,13 +164,11 @@
     }
 </script>
 
-<svelte:window bind:innerWidth={width} />
-
 <script>
     import { onMount } from 'svelte'
     import { encode, decode } from 'qss'
     import { cdn } from 'cdn.js'
-    import { slugify, removeFalsy } from 'utils.js'
+    import { slugify, removeFalsy, mediaQuery } from 'utils.js'
     import Loading from 'components/Loading.svelte'
     import { slide } from 'svelte/transition'
     import SearchMultipleSelect from 'components/SearchMultipleSelect.svelte'
@@ -179,7 +177,7 @@
 
     let controller
     let active = -1
-    let width
+    const medQ = mediaQuery('(min-width: 1024px)')
     let filters = false
 
     const query = {

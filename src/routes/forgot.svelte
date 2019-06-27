@@ -5,7 +5,7 @@
 
 <div class="min-h-screen">
     <div class="w-full max-w-sm lg:max-w-2xl lg:flex mx-auto mt-24 shadow-md rounded overflow-hidden">
-        <div class="hidden lg:block w-1/2 bg-cover bg-center" style="{width >= 1024 ? `background-image: url(${cdn(img, { w: 1000 })});` : '' }" />
+        <div class="hidden lg:block w-1/2 bg-cover bg-center" style="{$medQ ? `background-image: url(${cdn(img, { w: 1000 })});` : '' }" />
         <div class="lg:w-1/2 bg-white dark:bg-gray-700 px-8 pt-6 pb-8">
             <form on:submit|preventDefault={submit}>
                 {#if error_message}
@@ -35,19 +35,19 @@
     </div>
 </div>
 
-<svelte:window bind:innerWidth={width} />
-
 <script>
     import { cdn } from 'cdn.js'
     import { onMount } from 'svelte'
     import { wallpaper } from 'wallpaper.js'
+    import { mediaQuery } from 'utils.js'
+
+    const medQ = mediaQuery('(min-width: 1024px)')
 
     let error_message = ''
     const form = {
     	email: '',
     	recaptcha: ''
     }
-    let width
     const img = wallpaper()
 
     function submit() {

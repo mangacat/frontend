@@ -61,8 +61,6 @@
     </div>
 </div>
 
-<svelte:window bind:innerWidth={width} />
-
 <script context="module">
 	export async function preload(_, { user }) {
 		if (!user) this.redirect(301, '/')
@@ -75,7 +73,6 @@
     import { goto, stores } from '@sapper/app'
     import * as api from 'api.js'
 
-    let width
     let form_element
     let errors = {}
 

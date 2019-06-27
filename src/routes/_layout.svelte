@@ -1,4 +1,4 @@
-{#if !$page.path.startsWith('/read/')}
+{#if process.browser && !$page.path.startsWith('/read/')}
 	<Nav />
 {/if}
 
