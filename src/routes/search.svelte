@@ -1,3 +1,7 @@
+<svelte:head>
+    <title>Search - MangaCat</title>
+</svelte:head>
+
 <div class="min-h-screen mt-6 px-4 search max-w-9xl mx-auto">
     <div>
         <div class="{!$medQ ? 'search-input' : ''}">
@@ -104,11 +108,7 @@
             {/if}
         {/await}
     </div>
-  </div>
-
-<svelte:head>
-    <title>Search - MangaCat</title>
-</svelte:head>
+</div>
 
 <style lang="postcss">
 .search {
@@ -165,12 +165,12 @@
 </script>
 
 <script>
+    import { cdn } from 'cdn.js'
     import { onMount } from 'svelte'
     import { encode, decode } from 'qss'
-    import { cdn } from 'cdn.js'
-    import { slugify, removeFalsy, mediaQuery } from 'utils.js'
-    import Loading from 'components/Loading.svelte'
     import { slide } from 'svelte/transition'
+    import Loading from 'components/Loading.svelte'
+    import { slugify, removeFalsy, mediaQuery } from 'utils.js'
     import SearchMultipleSelect from 'components/SearchMultipleSelect.svelte'
     
     export let tags
@@ -179,6 +179,7 @@
     let active = -1
     const medQ = mediaQuery('(min-width: 1024px)')
     let filters = false
+    let merged = false
 
     const query = {
     	name: '',
@@ -201,7 +202,7 @@
     const tagSearch = (search, options) => { return options.filter(elem => elem.name.toLowerCase().includes(search.toLowerCase())) }
 
     const process = async () => {
-    	if (typeof window === 'undefined') return []
+    	if (!merged || !process.browser) return []
     	if (controller) controller.abort()
 
     	active = -1
@@ -260,5 +261,7 @@
     	const initial_query = encode(removeFalsy(query), '?')
 
     	if (initial_query !== "?") window.history.pushState({}, '', `search${initial_query.replace(new RegExp('%2C', 'g'), ',')}`)
+        
+    	merged = true
     })
 </script>
