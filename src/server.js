@@ -27,7 +27,7 @@ polka()
 		store,
 		secret: SESSION_SECRET,
 		cookie: {
-			maxAge: 31536000
+			maxAge: 86400000
 		},
 		resave: false,
 		saveUninitialized: false
