@@ -25,7 +25,7 @@
 
 	const log = async () => {
 		await tick()
-		if (typeof window === 'object' && ga) ga.send('pageview')
+		if (process.browser && ga) ga.send('pageview')
 	}
 
 	onMount(() => {
