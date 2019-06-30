@@ -21,7 +21,8 @@ module.exports = {
         'prefer-arrow-callback': 2,
         'prefer-const': [ 2, { 'destructuring': 'all' } ],
         'arrow-spacing': 2,
-        'no-inner-declarations': 0
+        'no-inner-declarations': 0,
+        'require-atomic-updates': 0
     },
     'env': {
         'es6': true,
@@ -40,9 +41,15 @@ module.exports = {
         'plugin:cypress/recommended'
     ],
     'parserOptions': {
-        'ecmaVersion': 2017,
+        'ecmaVersion': 2019,
         'sourceType': 'module'
     },
+    'overrides': [
+        {
+            'files': '*.svelte',
+            'processor': 'svelte3/svelte3'
+        }
+    ],
     'settings': {
         'svelte3/ignore-styles': ({ lang }) => { return lang === 'postcss' }
     }
