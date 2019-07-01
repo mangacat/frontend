@@ -53,7 +53,7 @@
     "eslint": "^6.0.1",
     "eslint-plugin-cypress": "^2.2.1",
     "eslint-plugin-import": "^2.17.3",
-    "eslint-plugin-svelte3": "^2.2.2",
+    "eslint-plugin-svelte3": "^2.4.0",
     "formee": "^1.0.0",
     "npm-run-all": "^4.1.5",
     "popper.js": "^1.15.0",
