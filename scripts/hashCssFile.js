@@ -1,17 +1,22 @@
+const postcss = require('postcss')
 const { createHash } = require('crypto')
-const { readFileSync, writeFileSync, unlinkSync } = require('fs')
+const { plugins } = require('../postcss.config')
+const { readFile, writeFile, mkdir } = require('fs')
 
-const css = readFileSync('./static/css/app.css', { encoding: 'utf8' })
-const destFile = `app.${createHash('md5').update(css).digest('hex').substring(0, 8)}.css`
+console.time('Built CSS in')
 
-const replaceInFile = (file, str1, str2) => {
-	const orig = readFileSync(file, { encoding: 'utf8' })
-	writeFileSync(file, orig.replace(str1, str2))
-}
+readFile('./src/css/tailwind.pcss', { encoding: 'utf8' }, (err, css) => {
+	postcss(plugins)
+		.process(css, { from: './src/css/tailwind.pcss', to: './static/css/app.css', map: false })
+		.then(result => {
+			mkdir('./static/css/', () => true)
+			const hash = createHash('md5').update(result.css).digest('hex').substring(0, 8)
+			writeFile(`./static/css/app.${hash}.css`, result.css, () => true)
 
-writeFileSync(`./static/css/${destFile}`, css)
-
-replaceInFile('./__sapper__/build/template.html', 'app.css', destFile)
-replaceInFile('./__sapper__/build/service-worker.js', 'app.css', destFile)
-
-unlinkSync('./static/css/app.css')
+			readFile('./src/template.html', { encoding: 'utf8' }, (err, file) => {
+				writeFile('./src/template.html', file.replace(new RegExp('/css/app.+?css'), `/css/app.${hash}.css`), () => {
+					console.timeEnd('Built CSS in')
+				})
+			})
+		})
+})
