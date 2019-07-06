@@ -6,7 +6,7 @@
     <div class="rounded-lg w-full h-64 bg-cover bg-center relative flex items-end shadow" alt="{user.username}" style="background-image: url('{cdn(user.cover, { h: 512 })}');">
         <div class="h-full w-full flex flex-col justify-end">
             <div class="flex ml-4 md:ml-8">
-                <img class="rounded-t md:rounded w-32 h-32 md:-mb-8 z-20 object-cover object-center md:shadow-md" alt="{user.username}" src="{cdn(user.mugshot, { resize: '256,256' })}" />
+                <img class="rounded-t md:rounded w-32 h-32 md:-mb-8 z-20 object-cover object-center md:shadow-md bg-gray-300 dark:bg-gray-700" alt="{user.username}" src="{cdn(user.mugshot, { resize: '256,256' }) || '/img/mugshot.png'}" />
                 <div class="ml-4 text-gray-300">
                     <div class="mt-6">
                         <span class="leading-none py-2 px-2 font-extrabold text-xl" style="background-color: rgba(26, 32, 44, 0.6); text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);">{user.username}</span>
