@@ -22,6 +22,7 @@ const preprocess = sveltePreprocess({
 })
 
 const onwarn = (warning, onwarn) => (warning.code === 'CIRCULAR_DEPENDENCY' &&  /[/\\]@sapper[/\\]/.test(warning.message)) || onwarn(warning)
+const dedupe = importee => importee === 'svelte' || importee.startsWith('svelte/');
 
 export default {
 	client: {
@@ -40,7 +41,7 @@ export default {
 				preprocess,
 				hydratable: true
 			}),
-			resolve({ browser: true }),
+			resolve({ browser: true, dedupe }),
 			commonjs(),
 
 			legacy && babel({
@@ -83,7 +84,7 @@ export default {
 				preprocess,
 				generate: 'ssr'
 			}),
-			resolve(),
+			resolve({ dedupe }),
 			commonjs()
 		],
 		external: Object.keys(pkg.dependencies).concat(
