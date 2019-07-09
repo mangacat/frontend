@@ -22,7 +22,7 @@ const preprocess = sveltePreprocess({
 })
 
 const onwarn = (warning, onwarn) => (warning.code === 'CIRCULAR_DEPENDENCY' &&  /[/\\]@sapper[/\\]/.test(warning.message)) || onwarn(warning)
-const dedupe = importee => importee === 'svelte' || importee.startsWith('svelte/');
+const dedupe = importee => importee === 'svelte' || importee.startsWith('svelte/')
 
 export default {
 	client: {
