@@ -22,7 +22,7 @@
 <script>
     import * as api from 'api.js'
     import { onMount } from 'svelte'
-    import { slugify } from 'utils.js'
+    import { slugify } from 'utils'
     import Chapter from 'components/Chapter.svelte'
     import LoadingPulse from 'components/LoadingPulse.svelte'
 

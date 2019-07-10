@@ -51,7 +51,7 @@
 
 <script>
     import { cdn } from 'cdn.js'
-    import { timeAgo, mediaQuery } from 'utils.js'
+    import { timeAgo, mediaQuery } from 'utils'
     import { stores } from '@sapper/app'
 
     export let user

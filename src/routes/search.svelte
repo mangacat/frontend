@@ -171,7 +171,7 @@
     import { encode, decode } from 'qss'
     import { slide } from 'svelte/transition'
     import Loading from 'components/Loading.svelte'
-    import { slugify, removeFalsy, mediaQuery } from 'utils.js'
+    import { slugify, removeFalsy, mediaQuery } from 'utils'
     import SearchMultipleSelect from 'components/SearchMultipleSelect.svelte'
     
     export let tags

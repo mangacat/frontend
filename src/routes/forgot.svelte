@@ -39,7 +39,7 @@
     import { cdn } from 'cdn.js'
     import { onMount } from 'svelte'
     import { wallpaper } from 'wallpaper.js'
-    import { mediaQuery } from 'utils.js'
+    import { mediaQuery } from 'utils'
 
     const medQ = mediaQuery('(min-width: 1024px)')
 

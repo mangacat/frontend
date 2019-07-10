@@ -113,7 +113,7 @@
 
 <script>
     import { cdn } from 'cdn.js'
-    import { slugify, mediaQuery } from 'utils.js'
+    import { slugify, mediaQuery } from 'utils'
 
     export let people
 

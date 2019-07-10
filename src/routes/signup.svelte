@@ -101,7 +101,7 @@
     import { validate, serialize } from 'formee'
     import { userSession } from 'stores.js'
     import { wallpaper } from 'wallpaper.js'
-    import { mediaQuery } from 'utils.js'
+    import { mediaQuery } from 'utils'
 
     let password_visibilty = false
     let password_elem
