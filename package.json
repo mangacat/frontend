@@ -54,7 +54,7 @@
     "eslint-plugin-svelte3": "^2.6.0",
     "formee": "^1.0.0",
     "husky": "^3.0.0",
-    "lint-staged": "^9.1.0",
+    "lint-staged": "^9.2.0",
     "npm-run-all": "^4.1.5",
     "popper.js": "^1.15.0",
     "postcss": "^7.0.17",
@@ -69,7 +69,7 @@
     "rollup-plugin-svelte": "^5.1.0",
     "rollup-plugin-terser": "^5.1.1",
     "sapper": "^0.27.4",
-    "svelte": "^3.6.6",
+    "svelte": "^3.6.7",
     "svelte-preprocess": "^2.14.4",
     "tailwindcss": "^1.0.4"
   },
