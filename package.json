@@ -14,7 +14,7 @@
     "start": "node __sapper__/build",
     "cy:run": "cypress run",
     "cy:open": "cypress open",
-    "test": "npm run build && (PORT=3100 run-p --race start cy:run)",
+    "test": "npm run build && node -r esm scripts/cypress.js && (PORT=3100 run-p --race start cy:run)",
     "lint": "eslint --ext .js,.svelte --ignore-path .gitignore ."
   },
   "engines": {
@@ -46,13 +46,13 @@
     "clipboard-copy": "^3.0.0",
     "css-prefers-color-scheme": "^4.0.0",
     "cssnano": "^4.1.10",
-    "cypress": "^3.4.0",
     "dropzone": "^5.5.1",
     "eslint": "^6.0.1",
     "eslint-plugin-cypress": "^2.6.0",
     "eslint-plugin-import": "^2.18.1",
     "eslint-plugin-svelte3": "^2.7.2",
     "esm": "^3.2.25",
+    "execa": "^2.0.3",
     "formee": "^1.0.0",
     "husky": "^3.0.1",
     "lint-staged": "^9.2.0",
