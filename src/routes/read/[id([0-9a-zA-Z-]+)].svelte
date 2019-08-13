@@ -4,6 +4,8 @@
     <meta property="og:image" content="{webpub['metadata']['image']}">
     <meta property="og:description" content="{webpub['metadata']['description']}">
 
+	<link rel="preload" href="https://unpkg.com/xbreader@0.29.1/dist/xbreader-en.js" as="script">
+
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" crossorigin="anonymous">
 	<link rel="stylesheet" href="https://unpkg.com/xbreader@0.29.1/dist/xbstyles.css" crossorigin="anonymous">
 </svelte:head>
