@@ -6,7 +6,7 @@
     <div>
         <div class="{!$medQ ? 'search-input' : ''}">
             <div class="relative">
-                <input bind:value={name} class="focus:outline-none focus:shadow-outline focus:shadow-md shadow bg-white dark:bg-gray-700 rounded py-2 pr-4 pl-10 block appearance-none leading-normal w-full" type="search" placeholder="Search" />
+                <input bind:this={name_input} bind:value={name} class="focus:outline-none focus:shadow-outline focus:shadow-md shadow bg-white dark:bg-gray-700 rounded py-2 pr-4 pl-10 block appearance-none leading-normal w-full" type="search" placeholder="Search" />
                 <div class="pointer-events-none absolute inset-y-0 left-0 pl-3 flex items-center">
                     <svg class="fill-current pointer-events-none w-5 h-5 opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                         <path d="M16.32 14.9l1.1 1.1c.4-.02.83.13 1.14.44l3 3a1.5 1.5 0 0 1-2.12 2.12l-3-3a1.5 1.5 0 0 1-.44-1.14l-1.1-1.1a8 8 0 1 1 1.41-1.41l.01-.01zM10 16a6 6 0 1 0 0-12 6 6 0 0 0 0 12z" />
@@ -181,6 +181,7 @@
     const medQ = mediaQuery('(min-width: 1024px)')
     let filters = false
     let merged = false
+    let name_input
 
     let name = ''
     let status = []
@@ -212,7 +213,7 @@
 
     	await goto(`search${query && `?${query}`}`)
         
-    	el.focus()
+    	if (el === name_input) el.focus()
 
     	const api_query = removeFalsy({
     		name__icontains: name,
