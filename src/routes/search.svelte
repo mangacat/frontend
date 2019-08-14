@@ -201,6 +201,8 @@
     const tagSearch = (search, options) => { return options.filter(elem => elem.name.toLowerCase().includes(search.toLowerCase())) }
 
     async function search() {
+    	// TODO: remove activeElement
+    	const el = document.activeElement
     	if (!merged || !process.browser) return []
     	if (controller) controller.abort()
 
@@ -209,6 +211,8 @@
     	const query = encode(removeFalsy(convertArraysToString({ name, status, country, tags_exc: tags_exc.map(x => x.name), tags_inc: tags_inc.map(x => x.name), hentai }))).replace(new RegExp('%2C', 'g'), ',')
 
     	await goto(`search${query && `?${query}`}`)
+        
+    	el.focus()
 
     	const api_query = removeFalsy({
     		name__icontains: name,
