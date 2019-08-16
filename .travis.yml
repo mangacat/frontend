@@ -21,6 +21,7 @@ script:
   - npm run lint
 
 before_deploy:
+  - npm remove cypress
   - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
   - docker build -t registry.gitlab.com/mangash/manga-frontend .
 
