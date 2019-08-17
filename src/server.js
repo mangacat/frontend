@@ -2,7 +2,6 @@ import sirv from 'sirv'
 import polka from 'polka'
 import * as Sentry from '@sentry/node'
 import * as sapper from '@sapper/server'
-import shrinkRayCurrent from 'shrink-ray-current'
 import session from 'express-session'
 import bodyParser from 'body-parser'
 
@@ -48,7 +47,6 @@ if (dev) {
 			saveUninitialized: false
 		}))
 		.use(
-			shrinkRayCurrent(),
 			sirv('static', { dev, etag: true, maxAge: 31536000, immutable: true }),
 			sapper.middleware({
 				session: req => ({
