@@ -14,7 +14,6 @@ cache:
 
 install:
   - npm ci
-  - npm install -g cypress@3.4.0
 
 script:
   - npm test
