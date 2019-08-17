@@ -12,8 +12,7 @@
     "build:css": "node -r esm scripts/postcss.js",
     "build:sapper": "sapper build --legacy",
     "start": "node __sapper__/build",
-    "test": "npm run build && (run-p start test:cmd)",
-    "test:cmd": "tape test/*.js | tap-spec",
+    "test": "npm run build && (tape test/*.js | tap-spec)",
     "lint": "eslint --ext .js,.svelte --ignore-path .gitignore ."
   },
   "engines": {
