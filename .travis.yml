@@ -14,14 +14,13 @@ cache:
 
 install:
   - npm ci
-  - npm install cypress@3.4.0
+  - npm install -g cypress@3.4.0
 
 script:
   - npm test
   - npm run lint
 
 before_deploy:
-  - npm remove cypress
   - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
   - docker build -t registry.gitlab.com/mangash/manga-frontend .
 
