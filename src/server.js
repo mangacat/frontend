@@ -56,6 +56,7 @@ if (dev) {
 				})
 			})
 		)
+		.listen(PORT)
 }
 
 export { app }
