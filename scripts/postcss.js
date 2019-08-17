@@ -1,9 +1,7 @@
-import postcss from 'postcss'
-import { createHash } from 'crypto'
-import * as config from '../postcss.config'
-import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'fs'
-
-const { plugins } = config
+const postcss = require('postcss')
+const { createHash } =  require('crypto')
+const { plugins } = require('../postcss.config.js')
+const { readFileSync, writeFileSync, mkdirSync, existsSync } = require('fs')
 
 function process() {
 	const css = readFileSync('./src/css/tailwind.pcss', { encoding: 'utf8' })
