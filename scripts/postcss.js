@@ -12,7 +12,7 @@ function process() {
 			to: './static/css/app.css',
 			map: false
 		}).then(result => {
-			if (!existsSync('./static/css/')) mkdirSync('./static/css/')
+			existsSync('./static/css/') || mkdirSync('./static/css/')
 	
 			const hash = createHash('md5').update(result.css).digest('hex').substring(0, 8)
 			writeFileSync(`./static/css/app.${hash}.css`, result.css)
