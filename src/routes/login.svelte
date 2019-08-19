@@ -4,7 +4,7 @@
 
 <div class="min-h-screen">
     <div class="w-full max-w-sm lg:max-w-2xl lg:flex mx-auto mt-24 shadow-md rounded overflow-hidden mx-2">
-        <div class="hidden lg:block w-1/2 bg-cover bg-center" style="{width >= 1024 ? `background-image: url(${cdn(img, { w: 1000 })});` : '' }" />
+        <div class="hidden lg:block w-1/2 bg-cover bg-center" style="{$medQ ? `background-image: url(${cdn(img, { w: 1000 })});` : '' }" />
         <div class="lg:w-1/2 bg-white dark:bg-gray-700 px-8 pt-6 pb-8">
             <form bind:this={form_element} on:submit|preventDefault={submit}>
                 {#if errors.response}
@@ -54,8 +54,6 @@
     </div>
 </div>
 
-<svelte:window bind:innerWidth={width} />
-
 <script context="module">
 	export async function preload(_, { user }) {
 		if (user) this.redirect(301, '/')
@@ -68,12 +66,15 @@
     import { userSession } from 'stores.js'
     import { validate, serialize } from 'formee'
     import { wallpaper } from 'wallpaper.js'
+    import { mediaQuery } from 'utils'
+    
+    const medQ = mediaQuery('(min-width: 1024px)')
 
     let password_visibilty = false
     let password_elem
     let form_element
     let errors = {}
-    let width
+
     const img = wallpaper()
 
     const form_rules = {

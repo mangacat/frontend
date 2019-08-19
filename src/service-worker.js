@@ -39,12 +39,11 @@ self.addEventListener('fetch', event => {
 	// don't try to handle e.g. data: URIs
 	if (!url.protocol.startsWith('http')) return
 
+	// don't try to handle api calls
+	if (url.hostname.startsWith('api')) return
+
 	// ignore dev server requests
 	if (url.hostname === self.location.hostname && url.port !== self.location.port) return
-
-	// ignore api requests
-	// TODO: fix the request signal not aborting the fetch and then remove this
-	if (url.hostname.startsWith('api')) return
 
 	// always serve static files and bundler-generated assets from cache
 	if (cached.has(event.request.url)) {
@@ -57,20 +56,21 @@ self.addEventListener('fetch', event => {
 	// for everything else, try the network first, falling back to
 	// cache if the user is offline. (If the pages never change, you
 	// might prefer a cache-first approach to a network-first one.)
-	event.respondWith(
-		caches
-			.open(`offline${timestamp}`)
-			.then(async cache => {
-				try {
-					const response = await fetch(url, { signal: event.request.signal })
-					cache.put(event.request, response.clone())
-					return response
-				} catch (err) {
-					const response = await cache.match(event.request)
-					if (response) return response
 
-					throw err
-				}
-			})
-	)
+	const cachePromise = caches
+		.open(`offline${timestamp}`)
+		.then(async cache => {
+			try {
+				const response = await fetch(event.request)
+				cache.put(event.request, response.clone())
+				return response
+			} catch (err) {
+				const response = await cache.match(event.request)
+				if (response) return response
+
+				throw err
+			}
+		})
+
+	event.respondWith(cachePromise)
 })

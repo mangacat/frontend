@@ -1,4 +1,4 @@
-{#if !$page.path.startsWith('/read/')}
+{#if process.browser && !$page.path.startsWith('/read/')}
 	<Nav />
 {/if}
 
@@ -25,7 +25,7 @@
 
 	const log = async () => {
 		await tick()
-		if (typeof window === 'object' && ga) ga.send('pageview')
+		if (process.browser && ga) ga.send('pageview')
 	}
 
 	onMount(() => {

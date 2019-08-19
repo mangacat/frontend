@@ -3,7 +3,7 @@
 </svelte:head>
 
 <div class="people-wrapper min-h-screen px-4 pt-8 max-w-5xl mx-auto mb-8">
-    {#if width < 640}
+    {#if $medQ}
         <div class="flex pb-2 mb-2">
             {#if people.image !== 'https://cdn.myanimelist.net/img/sp/icon/apple-touch-icon-256.png'}
                 <img alt="{people.name}" src="{cdn(people.image, { resize: '384,512' })}" class="h-32 w-24 rounded shadow mr-4">
@@ -99,8 +99,6 @@
     {/if}
 </div>
 
-<svelte:window bind:innerWidth={width} />
-
 <script context="module">
     import * as api from 'api.js'
 
@@ -115,10 +113,11 @@
 
 <script>
     import { cdn } from 'cdn.js'
-    import { slugify } from 'filters.js'
+    import { slugify, mediaQuery } from 'utils'
 
     export let people
-    let width
+
+    const medQ = mediaQuery('(max-width: 640px)')
     let about_expanded = false
 </script>
 
