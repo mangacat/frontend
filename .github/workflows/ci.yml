@@ -1,0 +1,54 @@
+name: CI
+
+on:
+  push:
+    branches:
+    - master
+  pull_request:
+    branches:
+    - master
+
+jobs:
+  ci:
+    name: CI
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@master
+      with:
+        fetch-depth: 1
+    - uses: actions/setup-node@v1
+      with:
+        version: 12
+
+    - name: Install
+      run: npm ci
+
+    - name: Test
+      run: npm test
+      env:
+        SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
+        SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+        GOOGLE_RECAPTCHA_SITEKEY: ${{ secrets.GOOGLE_RECAPTCHA_SITEKEY }}
+        GOOGLE_ANALYTICS_ID: ${{ secrets.GOOGLE_ANALYTICS_ID }}
+      
+    - name: Lint
+      run: npm run lint
+    
+    - if: github.event_name == 'pull_request'
+      uses: actions/docker/cli@master
+
+    - name: Build
+      if: github.event_name == 'pull_request'
+      run: docker build -t registry.gitlab.com/mangash/manga-frontend 
+    
+    - name: Deploy
+      if: github.repository == 'mangacat/frontend' && github.event_name == 'push'
+      uses: pangzineng/Github-Action-One-Click-Docker@master
+      env:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        DOCKER_REGISTRY_URL: ${{ secrets.DOCKER_REGISTRY_URL }}
+        DOCKER_IMAGE_NAME: ${{ secrets.DOCKER_IMAGE_NAME }}
+        DOCKER_IMAGE_TAG: ${{ secrets.DOCKER_IMAGE_TAG }}
+        DOCKER_NAMESPACE: ${{ secrets.DOCKER_NAMESPACE }}
