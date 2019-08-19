@@ -153,7 +153,8 @@
     onMount(() => {
     	const droppable = new Droppable({
     		element: dropzone,
-    		acceptsMultipleFiles: true
+    		acceptsMultipleFiles: true,
+    		dragOverClass: 'shadow-lg'
     	})
 
     	droppable.onFilesDropped(dfiles => {
