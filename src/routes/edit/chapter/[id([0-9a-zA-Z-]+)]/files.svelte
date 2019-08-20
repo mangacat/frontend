@@ -6,7 +6,7 @@
             <span>or click to select files</span>
         </div>
     </div>
-    <div class="{sorted_files.length && 'pt-4 pb-2'}">
+    <div class="{sorted_files.length && 'pt-4'}">
         {#each sorted_files as item, i (item.id)}
             <div class="{item.status} {item.status === 'success' && 'text-green-500'} {item.status === 'uploading' && 'text-yellow-500'} {item.status === 'error' && 'text-red-500'} file mx-8 p-2">
                 <svg class="status fill-current h-full w-full" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
