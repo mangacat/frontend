@@ -35,10 +35,6 @@ jobs:
     - name: Lint
       run: npm run lint
     
-    - name: Build
-      if: github.event_name == 'pull_request'
-      run: docker build -t registry.gitlab.com/mangash/manga-frontend 
-    
     - name: Deploy
       if: github.repository == 'mangacat/frontend' && github.event_name == 'push'
       uses: pangzineng/Github-Action-One-Click-Docker@master
