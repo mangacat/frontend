@@ -1,14 +1,14 @@
-<div class="inline-block rounded-lg w-full bg-white dark:bg-gray-700 p-8 shadow-md mb-8">
-    <div bind:this={dropzone} class="text-gray-600 dark:text-gray-400 inline-block rounded w-full bg-gray-100 border-2 border-dashed border-gray-400 dark:border-gray-900 dark:bg-gray-800 p-4 cursor-pointer">
+<div class="inline-block rounded-lg w-full bg-white dark:bg-gray-700 py-8 shadow-md mb-8">
+    <div bind:this={dropzone} class="text-gray-600 dark:text-gray-400 rounded bg-gray-100 border-2 border-dashed border-gray-400 dark:border-gray-900 dark:bg-gray-800 p-4 mx-8 cursor-pointer">
         <div class="flex flex-col justify-center items-center py-8">
             <svg class="w-10 h-10 mb-4 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 2h9a1 1 0 0 1 .7.3l4 4a1 1 0 0 1 .3.7v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4c0-1.1.9-2 2-2zm9 2.41V7h2.59L15 4.41zM18 9h-3a2 2 0 0 1-2-2V4H6v16h12V9zm-5 4h2a1 1 0 0 1 0 2h-2v2a1 1 0 0 1-2 0v-2H9a1 1 0 0 1 0-2h2v-2a1 1 0 0 1 2 0v2z"/></svg>
             <strong>Drag and drop files</strong>
             <span>or click to select files</span>
         </div>
     </div>
-    <div bind:this={list} class="{sorted_files.length && 'pt-4'}">
+    <div class="{sorted_files.length && 'pt-4 pb-2'}">
         {#each sorted_files as item, i (item.id)}
-            <div class="{item.status} {item.status === 'success' && 'text-green-500'} {item.status === 'uploading' && 'text-yellow-500'} {item.status === 'error' && 'text-red-500'} file mx-1 pt-4">
+            <div class="{item.status} {item.status === 'success' && 'text-green-500'} {item.status === 'uploading' && 'text-yellow-500'} {item.status === 'error' && 'text-red-500'} file mx-8 p-2">
                 <svg class="status fill-current h-full w-full" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                     {#if item.status === 'success'}
                         <path d="M0 11l2-2 5 5L18 3l2 2L7 18z"/>
@@ -120,10 +120,8 @@
     import Droppable from 'droppable'
     import { chapter } from './chapter.js'
     import prettyBytes from 'pretty-bytes'
-    import SmoothDnD from 'smooth-dnd'
 
-    let list
-    let dropzone 
+    let dropzone
     let sorted_files = []
     const files = [...$chapter.files]
 
@@ -138,10 +136,6 @@
     			if (a.file.name > b.file.name) return 1
     			return 0
     		})
-
-    	SmoothDnD(list, {
-    		lockAxis: 'y'
-    	})
     }
 
     function removeFile(index) {
