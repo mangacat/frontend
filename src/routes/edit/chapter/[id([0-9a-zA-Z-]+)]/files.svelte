@@ -188,7 +188,6 @@
     					event => {
     						if (event.lengthComputable) {
     							files[index].progress = (event.loaded / event.total) * files[index].file.size
-    							if (event.loaded === event.total) files[index].status = 'success'
     							updateSortedFiles()
     						}
     					}, 
@@ -199,6 +198,19 @@
     					'error',
     					() => {
     						files[index].status = 'error'
+    						updateSortedFiles()
+    					},
+    					false
+    				)
+                    
+    				xhr.addEventListener(
+    					'load',
+    					() => {
+    						if (xhr.status === 200) {
+    							console.log(JSON.parse(xhr.response))
+    							files[index].status = 'success'
+    							updateSortedFiles()
+    						}
     					},
     					false
     				)
