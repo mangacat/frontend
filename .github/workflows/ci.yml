@@ -35,9 +35,6 @@ jobs:
     - name: Lint
       run: npm run lint
     
-    - if: github.event_name == 'pull_request'
-      uses: actions/docker/cli@master
-
     - name: Build
       if: github.event_name == 'pull_request'
       run: docker build -t registry.gitlab.com/mangash/manga-frontend 
