@@ -179,9 +179,9 @@
                     
     				xhr.upload.addEventListener(
     					'progress', 
-    					event => {
-    						if (event.lengthComputable) {
-    							files[index].progress = (event.loaded / event.total) * files[index].file.size
+    					({ lengthComputable, loaded, total }) => {
+    						if (lengthComputable) {
+    							files[index].progress = (loaded / total) * files[index].file.size
     							updateSortedFiles()
     						}
     					}, 
