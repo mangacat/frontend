@@ -17,6 +17,8 @@ const { preprocess } = require('./svelte.config.js')
 const onwarn = (warning, onwarn) => (warning.code === 'CIRCULAR_DEPENDENCY' &&  /[/\\]@sapper[/\\]/.test(warning.message)) || onwarn(warning)
 const dedupe = importee => importee === 'svelte' || importee.startsWith('svelte/')
 
+const revision = require('child_process').execSync('git rev-parse HEAD').toString().trim()
+
 export default {
 	client: {
 		input: config.client.input(),
@@ -27,7 +29,8 @@ export default {
 				'process.env.NODE_ENV': JSON.stringify(mode),
 				'process.env.GOOGLE_ANALYTICS_ID': JSON.stringify(process.env.GOOGLE_ANALYTICS_ID),
 				'process.env.GOOGLE_RECAPTCHA_SITEKEY': JSON.stringify(process.env.GOOGLE_RECAPTCHA_SITEKEY),
-				'process.env.SENTRY_DSN': JSON.stringify(process.env.SENTRY_DSN)
+				'process.env.SENTRY_DSN': JSON.stringify(process.env.SENTRY_DSN),
+				'process.env.REVISION': JSON.stringify(revision)
 			}),
 			svelte({
 				dev,
@@ -70,7 +73,8 @@ export default {
 				'process.env.SENTRY_DSN': JSON.stringify(process.env.SENTRY_DSN),
 				'process.env.REDIS_HOST': JSON.stringify(process.env.REDIS_HOST),
 				'process.env.REDIS_PORT': JSON.stringify(process.env.REDIS_PORT),
-				'process.env.REDIS_PASS': JSON.stringify(process.env.REDIS_PASS)
+				'process.env.REDIS_PASS': JSON.stringify(process.env.REDIS_PASS),
+				'process.env.REVISION': JSON.stringify(revision)
 			}),
 			svelte({
 				dev,
