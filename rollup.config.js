@@ -19,6 +19,12 @@ const dedupe = importee => importee === 'svelte' || importee.startsWith('svelte/
 
 const revision = require('child_process').execSync('git rev-parse HEAD').toString().trim()
 
+console.time('Built CSS in')
+const { css } = require('./scripts/postcss.js')
+Promise
+	.resolve(css())
+	.then(() => console.timeEnd('Built CSS in'))
+
 export default {
 	client: {
 		input: config.client.input(),
