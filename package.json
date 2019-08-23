@@ -7,7 +7,7 @@
   "license": "GPL-3.0",
   "scripts": {
     "dev": "sapper dev",
-    "build": "sapper build --legacy",
+    "build": "sapper build",
     "start": "node __sapper__/build",
     "test": "npm run build && (tape test/*.js | tap-spec)",
     "lint": "eslint --ext .js,.svelte --ignore-path .gitignore ."
