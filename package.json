@@ -64,7 +64,7 @@
     "rollup-plugin-svelte": "^5.1.0",
     "rollup-plugin-terser": "^5.1.1",
     "sapper": "^0.27.8",
-    "svelte": "^3.9.0",
+    "svelte": "^3.9.1",
     "svelte-preprocess": "^2.15.1",
     "tailwindcss": "^1.1.2",
     "tap-spec": "^5.0.0",
