@@ -1,6 +1,5 @@
 module.exports = {
     'root': true,
-    'parser': 'babel-eslint',
     'rules': {
         'indent': [ 2, 'tab', { 'SwitchCase': 1 } ],
         'semi': [ 2, 'never' ],
