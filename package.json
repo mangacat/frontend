@@ -9,7 +9,7 @@
     "dev": "sapper dev",
     "build": "sapper build",
     "start": "node __sapper__/build",
-    "test": "npm run build && (tape test/*.js | tap-spec)",
+    "test": "tape test/*.js | tap-spec",
     "lint": "eslint --format=pretty --ext .js,.svelte --ignore-path .gitignore ."
   },
   "engines": {
