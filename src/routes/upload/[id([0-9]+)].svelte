@@ -57,15 +57,17 @@
 </div>
 
 <script context="module">
+    import * as api from 'api.js'
+
     export async function preload({ params }, { user }) {
     	if (!user) this.redirect(301, '/')
 
-    	const series_res = await this.fetch(`https://api.manga.cat/v1/series/${params.id}`)
+    	const series_res = await this.fetch(`${api.base}/series/${params.id}`)
     	const series = await series_res.json()
         
     	if (series.status === 500) this.error(404)
         
-    	const groups_res = await this.fetch('https://api.manga.cat/v1/groups_scanlation?limit=10000')
+    	const groups_res = await this.fetch(`${api.base}/groups_scanlation?limit=10000`)
     	const groups = await groups_res.json()
 
     	return { series, groups }
@@ -76,8 +78,6 @@
     import { goto, stores } from '@sapper/app'
     import { serialize } from 'formee'
     import SearchMultipleSelect from 'components/SearchMultipleSelect.svelte'
-    import * as api from 'api.js'
-
 
     export let series
     export let groups

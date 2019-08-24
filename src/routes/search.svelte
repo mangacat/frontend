@@ -236,7 +236,7 @@
 
     	controller = new AbortController()
     	const signal = controller.signal
-    	const response = await fetch(`https://api.manga.cat/v1/series${encode(removeFalsy(api_data)) && `?${encode(removeFalsy(api_data))}`}`, { signal })
+    	const response = await fetch(`${api.base}/series${encode(removeFalsy(api_data)) && `?${encode(removeFalsy(api_data))}`}`, { signal })
     	return await response.json()
     }
 
