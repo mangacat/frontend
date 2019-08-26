@@ -2,4 +2,4 @@ pre-commit:
   commands:
     linter:
       glob: "*.{js,svelte}"
-      run: npm run lint
+      run: npm run lint -s

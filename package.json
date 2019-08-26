@@ -9,8 +9,8 @@
     "dev": "sapper dev",
     "build": "sapper build",
     "start": "node __sapper__/build",
-    "test": "npm run build && (tape test/*.js | tap-spec)",
-    "lint": "eslint --ext .js,.svelte --ignore-path .gitignore ."
+    "test": "tape test/*.js | tap-spec",
+    "lint": "eslint --format=pretty --ext .js,.svelte --ignore-path .gitignore ."
   },
   "engines": {
     "node": ">= 12"
@@ -38,7 +38,7 @@
     "dotenv": "^8.1.0",
     "droppable": "^2.2.0",
     "eslint": "^6.2.2",
-    "eslint-plugin-cypress": "^2.6.1",
+    "eslint-formatter-pretty": "^2.1.1",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-svelte3": "^2.7.3",
     "formee": "^1.0.0",
