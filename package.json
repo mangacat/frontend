@@ -39,7 +39,6 @@
     "dropzone": "^5.5.1",
     "eslint": "^6.2.2",
     "eslint-formatter-pretty": "^2.1.1",
-    "eslint-plugin-cypress": "^2.6.1",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-svelte3": "^2.7.3",
     "formee": "^1.0.0",

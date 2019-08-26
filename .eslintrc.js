@@ -27,17 +27,14 @@ module.exports = {
         'es6': true,
         'browser': true,
         'node': true,
-        'cypress/globals': true
     },
     'plugins': [
-        'svelte3',
-        'cypress'
+        'svelte3'
     ],
     'extends': [
         'eslint:recommended',
         'plugin:import/errors',
-        'plugin:import/warnings',
-        'plugin:cypress/recommended'
+        'plugin:import/warnings'
     ],
     'parserOptions': {
         'ecmaVersion': 2019,
