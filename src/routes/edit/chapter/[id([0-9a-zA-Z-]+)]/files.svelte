@@ -116,14 +116,27 @@
 </style>
 
 <script>
+    import * as api from 'api.js'
     import { onMount } from 'svelte'
     import Droppable from 'droppable'
+    import { stores } from '@sapper/app'
     import { chapter } from './chapter.js'
     import prettyBytes from 'pretty-bytes'
 
     let dropzone
     let sorted_files = []
+    const { session } = stores()
     const files = [...$chapter.files]
+    	.map(elem => ({
+    		file: elem,
+    		size: elem.size,
+    		name: elem.name,
+    		progress: elem.size,
+    		status: 'success',
+    		id: `${Date.now()}${new Date(elem.updated).getTime()}-${elem.name}`,
+    		promise: elem,
+    		cancel: () => {}
+    	}))
 
     function updateSortedFiles() {
     	sorted_files = [...files]
@@ -138,13 +151,19 @@
     		})
     }
 
-    function removeFile(index) {
-    	const removed = files.splice(sorted_files[index].index, 1)
-    	console.log(removed)
+    async function removeFile(index) {
+    	const removed = files.splice(sorted_files[index].index, 1)[0]
+    	if (removed.status !== 'success') {
+    		removed.cancel()
+    	} else {
+    		await api.del(`series_chapters_files/${removed.promise.id}`, $session.user.token)
+    	}
     	updateSortedFiles()
     }
 
     onMount(() => {
+    	updateSortedFiles()
+        
     	const droppable = new Droppable({
     		element: dropzone,
     		acceptsMultipleFiles: true,
@@ -161,7 +180,8 @@
     				progress: 0,
     				status: 'uploading',
     				id: `${Date.now()}${elem.lastModified}-${elem.name}`,
-    				promise: null
+    				promise: null,
+    				cancel: () => {}
     			}))
                 
     		const initial = files.length
@@ -176,6 +196,8 @@
     				formData.append('data', files[index].file)
 
     				const xhr = new XMLHttpRequest()
+                    
+    				files[index].cancel = () => { xhr.abort() }
                     
     				xhr.upload.addEventListener(
     					'progress', 
@@ -201,7 +223,9 @@
     					'load',
     					() => {
     						if (xhr.status === 200) {
-    							console.log(JSON.parse(xhr.response))
+    							const response = JSON.parse(xhr.response)
+    							files[index].promise = response.files.filter(x => !$chapter.files.map(elem => JSON.stringify(elem)).includes(JSON.stringify(x)))[0]
+    							chapter.set(response)
     							files[index].status = 'success'
     							updateSortedFiles()
     						}
@@ -209,19 +233,17 @@
     					false
     				)
                     
-    				xhr.open('POST', 'http://httpbin.org/post')
+    				xhr.open('POST', `${api.base}/series_chapters/${$chapter.id}`)
                     
-    				// xhr.setRequestHeader('Authorization', `Bearer ${$session.user.token}`)
-    				// xhr.setRequestHeader('Cache-Control', null)
-    				// xhr.setRequestHeader('X-Requested-With', null)
+    				xhr.setRequestHeader('Authorization', `Bearer ${$session.user.token}`)
+    				xhr.setRequestHeader('Cache-Control', null)
+    				xhr.setRequestHeader('X-Requested-With', null)
                     
     				xhr.send(formData)
                     
     				resolve()
     			})
     		}
-          
-    		updateSortedFiles()
     	})
         
     	return () => { droppable.destroy() }
