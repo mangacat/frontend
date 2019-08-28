@@ -1,6 +1,5 @@
 module.exports = {
     'root': true,
-    'parser': 'babel-eslint',
     'rules': {
         'indent': [ 2, 'tab', { 'SwitchCase': 1 } ],
         'semi': [ 2, 'never' ],
@@ -21,28 +20,32 @@ module.exports = {
         'prefer-arrow-callback': 2,
         'prefer-const': [ 2, { 'destructuring': 'all' } ],
         'arrow-spacing': 2,
-        'no-inner-declarations': 0
+        'no-inner-declarations': 0,
+        'require-atomic-updates': 0
     },
     'env': {
         'es6': true,
         'browser': true,
         'node': true,
-        'cypress/globals': true
     },
     'plugins': [
-        'svelte3',
-        'cypress'
+        'svelte3'
     ],
     'extends': [
         'eslint:recommended',
         'plugin:import/errors',
-        'plugin:import/warnings',
-        'plugin:cypress/recommended'
+        'plugin:import/warnings'
     ],
     'parserOptions': {
-        'ecmaVersion': 2017,
+        'ecmaVersion': 2019,
         'sourceType': 'module'
     },
+    'overrides': [
+        {
+            'files': '*.svelte',
+            'processor': 'svelte3/svelte3'
+        }
+    ],
     'settings': {
         'svelte3/ignore-styles': ({ lang }) => { return lang === 'postcss' }
     }

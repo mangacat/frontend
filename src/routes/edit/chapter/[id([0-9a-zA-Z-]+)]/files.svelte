@@ -77,7 +77,7 @@
     			acceptedFiles: 'image/jpeg,image/png,image/gif',
     			parallelUploads: 1,
     			paramName: 'data',
-    			url: `https://api.manga.cat/v1/series_chapters/${$chapter.id}`,
+    			url: `${api.base}/series_chapters/${$chapter.id}`,
     			previewsContainer: false,
     			headers: {
     				Authorization: `Bearer ${$session.user.token}`,

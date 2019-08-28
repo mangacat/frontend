@@ -1,15 +1,19 @@
+<svelte:head>
+    <title>Search - MangaCat</title>
+</svelte:head>
+
 <div class="min-h-screen mt-6 px-4 search max-w-9xl mx-auto">
     <div>
-        <div class="{width < 1024 ? 'search-input' : ''}">
+        <div class="{!$medQ ? 'search-input' : ''}">
             <div class="relative">
-                <input bind:value={query.name} class="focus:outline-none focus:shadow-outline focus:shadow-md shadow bg-white dark:bg-gray-700 rounded py-2 pr-4 pl-10 block appearance-none leading-normal w-full" type="search" placeholder="{process.browser ? $_.capital('search') : ''}" />
+                <input bind:this={name_input} bind:value={name} class="focus:outline-none focus:shadow-outline focus:shadow-md shadow bg-white dark:bg-gray-700 rounded py-2 pr-4 pl-10 block appearance-none leading-normal w-full" type="search" placeholder="{process.browser ? $_.capital('search') : ''}" />
                 <div class="pointer-events-none absolute inset-y-0 left-0 pl-3 flex items-center">
                     <svg class="fill-current pointer-events-none w-5 h-5 opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                         <path d="M16.32 14.9l1.1 1.1c.4-.02.83.13 1.14.44l3 3a1.5 1.5 0 0 1-2.12 2.12l-3-3a1.5 1.5 0 0 1-.44-1.14l-1.1-1.1a8 8 0 1 1 1.41-1.41l.01-.01zM10 16a6 6 0 1 0 0-12 6 6 0 0 0 0 12z" />
                     </svg>
                 </div>
             </div>
-            {#if width < 1024}
+            {#if !$medQ}
                 <button class="bg-white dark:bg-gray-700 rounded px-2 focus:outline-none focus:shadow-outline shadow" on:click="{() => { filters = !filters }}">
                     <svg class="h-full w-full fill-current" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                         <path d="M4 5h16a1 1 0 1 1 0 2H4a1 1 0 0 1 0-2zm3 6h10a1 1 0 0 1 0 2H7a1 1 0 0 1 0-2zm3 6h4a1 1 0 0 1 0 2h-4a1 1 0 0 1 0-2z" />
@@ -17,30 +21,30 @@
                 </button>
             {/if}
         </div>
-        {#if width >= 1024 || filters}
+        {#if $medQ || filters}
             <div transition:slide="{{ duration: 400 }}">
                 <div class="capitalize mb-1 mt-4">status</div>
-                <SearchMultipleSelect bind:value={query.status} options={['Completed', 'Releasing', 'Hiatus', 'Cancelled']} />
+                <SearchMultipleSelect bind:value={status} options={['Completed', 'Releasing', 'Hiatus', 'Cancelled']} />
                 <div class="capitalize mb-1 mt-4">country</div>
-                <SearchMultipleSelect bind:value={query.country} options={['Japan', 'China', 'Korea', 'Thailand', 'Vietnam', 'Philippines', 'Indonesia']} />
+                <SearchMultipleSelect bind:value={country} options={['Japan', 'China', 'Korea', 'Thailand', 'Vietnam', 'Philippines', 'Indonesia']} />
                 <div class="capitalize mb-1 mt-4">include tags</div>
-                <SearchMultipleSelect bind:value={query.tags_inc} options="{tags.filter(x => !query.tags_exc.includes(x))}" filterFunction="{tagSearch}" searchProperty="name" />
+                <SearchMultipleSelect bind:value={tags_inc} options="{tags.filter(x => !tags_exc.includes(x))}" filterFunction="{tagSearch}" searchProperty="name" />
                 <div class="capitalize mb-1 mt-4">exclude tags</div>
-                <SearchMultipleSelect bind:value={query.tags_exc} options="{tags.filter(x => !query.tags_inc.includes(x))}" filterFunction="{tagSearch}" searchProperty="name" />
+                <SearchMultipleSelect bind:value={tags_exc} options="{tags.filter(x => !tags_inc.includes(x))}" filterFunction="{tagSearch}" searchProperty="name" />
                 <label class="inline-flex items-center mb-1 mt-4">
-                    <input type="checkbox" class="form-checkbox h-4 w-4" bind:checked={query.hentai}>
+                    <input type="checkbox" class="form-checkbox h-4 w-4" bind:checked={hentai}>
                     <span class="capitalize ml-2">hentai (18+)</span>
                 </label>
             </div>
         {/if}
     </div>
     <div class="mb-8">
-        {#await process(query)}
+        {#await search(name, status, country, tags_exc, tags_inc, hentai)}
                 <div class="flex justify-center pt-2 pb-4">
                     <Loading />
                 </div>
         {:then results}
-            {#if results.length === 0}
+            {#if results.length === 0 && merged}
                 <div class="mt-4 text-center">
                     <div class="text-xl">
                         (╯°□°）╯︵ ┻━┻
@@ -53,13 +57,13 @@
                 <div class="results">
                     {#each results as {id, name, cover, description, tags}, i}
                         <div class="series rounded overflow-hidden bg-white dark:bg-gray-700 shadow hover:shadow-lg">
-                            <a class="z-20" href="/series/{id}/{slugify(name)}">
+                            <a rel=prefetch class="z-20" href="/series/{id}/{slugify(name)}">
                                 <img src="{cdn(cover, { resize: '320,512' })}" alt="Cover for {name}"/>
                             </a>
                             <div class="relative">
                                 <div class="series-content absolute left-0 {active === i ? 'active' : ''}">
                                     <div class="h-64 flex flex-col">
-                                        <a class="flex-shrink-0 truncate text-lg font-semibold pt-2 px-3" href="/series/{id}/{slugify(name)}">
+                                        <a rel=prefetch class="flex-shrink-0 truncate text-lg font-semibold pt-2 px-3" href="/series/{id}/{slugify(name)}">
                                             {name}
                                         </a>
                                         <p class="overflow-y-auto text-sm flex-grow leading-snug px-3 mb-2">
@@ -104,11 +108,7 @@
             {/if}
         {/await}
     </div>
-  </div>
-
-<svelte:head>
-    <title>Search - MangaCat</title>
-</svelte:head>
+</div>
 
 <style lang="postcss">
 .search {
@@ -164,41 +164,32 @@
     }
 </script>
 
-<svelte:window bind:innerWidth={width} />
-
 <script>
     import { cdn } from 'cdn.js'
     import { _ } from 'svelte-i18n'
     import { onMount } from 'svelte'
+    import { goto } from '@sapper/app'
     import { encode, decode } from 'qss'
-    import { slugify } from 'filters.js'
     import { slide } from 'svelte/transition'
     import Loading from 'components/Loading.svelte'
+    import { slugify, removeFalsy, mediaQuery } from 'utils'
     import SearchMultipleSelect from 'components/SearchMultipleSelect.svelte'
     
     export let tags
 
     let controller
     let active = -1
-    let width
+    const medQ = mediaQuery('(min-width: 1024px)')
     let filters = false
+    let merged = false
+    let name_input
 
-    const query = {
-    	name: '',
-    	status: [],
-    	country: [],
-    	tags_exc: [],
-    	tags_inc: [],
-    	hentai: false
-    }
-
-    const removeFalsy = obj => {
-    	const newObj = {}
-    	Object.keys(obj).forEach(prop => {
-    		if (obj[prop] || typeof obj[prop] == 'boolean') newObj[prop] = obj[prop]
-    	})
-    	return newObj
-    }
+    let name = ''
+    let status = []
+    let country = []
+    let tags_exc = []
+    let tags_inc = []
+    let hentai = false
 
     const convertArraysToString = obj => {
     	const newObj = {}
@@ -211,28 +202,30 @@
 
     const tagSearch = (search, options) => { return options.filter(elem => elem.name.toLowerCase().includes(search.toLowerCase())) }
 
-    const process = async () => {
-    	if (typeof window === 'undefined') return []
+    async function search() {
+    	// TODO: remove activeElement
+    	const el = document.activeElement
+    	if (!merged || !process.browser) return []
     	if (controller) controller.abort()
 
     	active = -1
-
-    	const encoded_query = encode(removeFalsy({...query, tags_inc: query['tags_inc'].map(x => x.name), tags_exc: query['tags_exc'].map(x => x.name)}), '?') !== '?' 
-    		? encode(removeFalsy(convertArraysToString({...query, tags_inc: query['tags_inc'].map(x => x.name), tags_exc: query['tags_exc'].map(x => x.name)})), '?')
-    		: ''
         
-    	window.history.pushState({}, '', `search${encoded_query.replace(new RegExp('%2C', 'g'), ',')}`)
+    	const query = encode(removeFalsy(convertArraysToString({ name, status, country, tags_exc: tags_exc.map(x => x.name), tags_inc: tags_inc.map(x => x.name), hentai }))).replace(new RegExp('%2C', 'g'), ',')
+
+    	await goto(`search${query && `?${query}`}`)
+        
+    	if (el === name_input) el.focus()
 
     	const api_query = removeFalsy({
-    		name__icontains: query['name'],
-    		hentai: query['hentai'],
-    		status__in: query['status'].join('+'),
-    		tags__tags_id__in: query['tags_inc'].map(x => x.id).join('+'),
-    		country__in: query['country'].join('+')
+    		name__icontains: name,
+    		hentai,
+    		status__in: status.join('+'),
+    		tags__tags_id__in: tags_inc.map(x => x.id).join('+'),
+    		country__in: country.join('+')
     	})
 
     	const api_exclude = removeFalsy({
-    		tags__tags_id__in: query['tags_exc'].map(x => x.id).join('+')
+    		tags__tags_id__in: tags_exc.map(x => x.id).join('+')
     	})
 
     	const api_data = {
@@ -244,32 +237,26 @@
 
     	controller = new AbortController()
     	const signal = controller.signal
-    	const response = await fetch(`https://api.manga.cat/v1/series${encode(removeFalsy(api_data), '?')}`, {signal})
+    	const response = await fetch(`${api.base}/series${encode(removeFalsy(api_data)) && `?${encode(removeFalsy(api_data))}`}`, { signal })
     	return await response.json()
     }
 
-    onMount(() => {
+    onMount(async () => {
     	if (window.location.search) {
-    		const window_query = decode(window.location.search.substring(1))
-    		const valid_keys = Object.keys(query)
+    		({ name = '', status = [], country = [], tags_exc = [], tags_inc = [], hentai = false } = decode(window.location.search.substring(1)))
             
-    		Object.keys(window_query).forEach(prop => {
-    			if (valid_keys.includes(prop)) {
-    				if (['status', 'country'].includes(prop)) {
-    					query[prop] = window_query[prop].split(',')
-    				} else if (['tags_exc', 'tags_inc'].includes(prop)) {
-    					query[prop] = tags.filter(tag => { return window_query[prop].split(',').includes(tag.name) })
-    				} else {
-    					query[prop] = window_query[prop]
-    				}
-    			}
-    		})
+    		status = status.constructor === String ? status.split(',') : []
+    		country = country.constructor === String ? country.split(',') : []
+    		tags_exc = tags_exc.constructor === String ? tags.filter(tag => tags_exc.split(',').includes(tag.name)) : []
+    		tags_inc = tags_inc.constructor === String ? tags.filter(tag => tags_inc.split(',').includes(tag.name)) : []
     	}
+        
+    	const query = encode(removeFalsy(convertArraysToString({ name, status, country, tags_exc: tags_exc.map(x => x.name), tags_inc: tags_inc.map(x => x.name), hentai }))).replace(new RegExp('%2C', 'g'), ',')
 
-    	controller = new AbortController()
+    	await goto(`search${query && `?${query}`}`)
+        
+    	merged = true
 
-    	const initial_query = encode(removeFalsy(query), '?')
-
-    	if (initial_query !== "?") window.history.pushState({}, '', `search${initial_query.replace(new RegExp('%2C', 'g'), ',')}`)
+    	status = status
     })
 </script>

@@ -48,6 +48,7 @@
 <script>
     import { stores } from '@sapper/app'
     import { cdn } from 'cdn.js'
+    import * as api from 'api.js'
     import { userSession } from 'stores.js'
     import Loading from 'components/Loading.svelte'
 
@@ -73,7 +74,7 @@
     	const formData = new FormData()
     	formData.append('data', file)
 
-    	await fetch(`https://api.manga.cat/v1/users/${$session.user.id}${query}`, {
+    	await fetch(`${api.base}/users/${$session.user.id}${query}`, {
     		method: 'POST',
     		body: formData,
     		headers: {

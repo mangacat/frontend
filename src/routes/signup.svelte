@@ -1,11 +1,11 @@
 <svelte:head>
     <title>Register - MangaCat</title>
-    <script type="text/javascript">var recaptchaOnload = function() { grecaptcha.render('recaptcha', {'sitekey' : process.env.GOOGLE_RECAPTCHA_SITEKEY}) }</script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </svelte:head>
 
 <div class="min-h-screen">
     <div class="w-full max-w-sm lg:max-w-2xl lg:flex mx-auto mt-24 shadow-md rounded overflow-hidden mx-2">
-        <div class="hidden lg:block w-1/2 bg-cover bg-center" style="{width >= 1024 ? `background-image: url(${cdn(img, { w: 1000 })});` : '' }" />
+        <div class="hidden lg:block w-1/2 bg-cover bg-center" style="{$medQ ? `background-image: url(${cdn(img, { w: 1000 })});` : '' }" />
         <div class="lg:w-1/2 bg-white dark:bg-gray-700 px-8 pt-6 pb-8">
             <form bind:this={form_element} on:submit|preventDefault={submit}>
                 <div class="mb-4">
@@ -75,7 +75,7 @@
                         <p class="text-sm text-red-600 dark:text-red-400 mt-1">{errors.confirmed_password}</p>
                     {/if}
                 </div>
-                <div id="recaptcha" class="flex justify-center mb-4"></div>
+                <div class="g-recaptcha flex justify-center mb-4" data-sitekey="{process.env.GOOGLE_RECAPTCHA_SITEKEY}"></div>
                 <div class="flex items-center justify-between">
                     <button type="submit" disabled={submitting} class="hover:shadow bg-gray-400 hover:bg-gray-300 text-gray-700 dark:text-gray-200 dark:bg-gray-800 dark:hover:bg-gray-900 font-bold py-2 px-4 rounded outline-none focus:shadow-outline dark:focus:bg-gray-900">
                         {submitting ? 'Submitting...' : 'Register'}
@@ -89,8 +89,6 @@
     </div>
 </div>
 
-<svelte:window bind:innerWidth={width} />
-
 <script context="module">
 	export async function preload(_, { user }) {
 		if (user) this.redirect(301, '/')
@@ -98,12 +96,12 @@
 </script>
 
 <script>
-    import { onMount } from 'svelte'
     import { goto } from '@sapper/app'
     import { cdn } from 'cdn.js'
     import { validate, serialize } from 'formee'
     import { userSession } from 'stores.js'
     import { wallpaper } from 'wallpaper.js'
+    import { mediaQuery } from 'utils'
 
     let password_visibilty = false
     let password_elem
@@ -112,7 +110,7 @@
     let form_element
     let errors = {}
     let submitting = false
-    let width
+    const medQ = mediaQuery('(min-width: 1024px)')
     const img = wallpaper()
     
     const form_rules = {
@@ -185,12 +183,4 @@
     	submitting = false
     	goto('/')
     }
-
-    onMount(() => {
-    	const e = document.createElement('script')
-    	e.src = 'https://www.google.com/recaptcha/api.js?onload=recaptchaOnload&render=explicit'
-    	document.head.appendChild(e)
-
-    	return () => { document.head.removeChild(e) }
-    })
 </script>
