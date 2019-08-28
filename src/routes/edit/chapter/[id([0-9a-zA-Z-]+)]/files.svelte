@@ -20,7 +20,7 @@
                 </svg>
                 <div class="meta flex">
                     <span class="flex-grow">{item.name}</span>
-                    <span class="text-gray-400 flex-grow-0">{prettyBytes(item.progress)} / {prettyBytes(item.size)}</span>
+                    <span class="text-gray-500 dark:text-gray-400 flex-grow-0">{prettyBytes(item.progress)} / {prettyBytes(item.size)}</span>
                 </div>
                 <progress class="progress" value="{item.progress}" max="{item.size}"></progress>
                 <div class="action">
