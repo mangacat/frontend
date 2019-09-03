@@ -28,7 +28,6 @@
     "sirv": "^0.4.2"
   },
   "devDependencies": {
-    "@arkweid/lefthook": "^0.6.3",
     "@fullhuman/postcss-purgecss": "^1.2.0",
     "@sentry/browser": "^5.6.3",
     "@sindresorhus/slugify": "^0.9.1",
