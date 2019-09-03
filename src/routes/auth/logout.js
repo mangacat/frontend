@@ -1,7 +1,7 @@
 export function post(req, res, next) {
 	req.session.destroy(err => {
 		if (err) {
-			console.log(err) // eslint-disable-line no-console
+			console.log(err)
 			return next(err)
 		}
 		res.setHeader('Content-Type', 'application/json')
