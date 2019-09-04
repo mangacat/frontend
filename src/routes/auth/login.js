@@ -1,12 +1,12 @@
 import * as api from 'api.js'
 
-export async function post(req, res) {
-	const user = req.body
+export async function post(request, response) {
+	const user = request.body
 
-	const response = await api.post('auth/login', user)
+	const apiResponse = await api.post('auth/login', user)
 
-	if (response.user) req.session.user = response.user
+	if (apiResponse.user) request.session.user = apiResponse.user
 
-	res.setHeader('Content-Type', 'application/json')
-	res.end(JSON.stringify(response))
+	response.setHeader('Content-Type', 'application/json')
+	response.end(JSON.stringify(apiResponse))
 }

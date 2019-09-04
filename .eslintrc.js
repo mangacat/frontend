@@ -21,7 +21,9 @@ module.exports = {
         'prefer-const': [ 2, { 'destructuring': 'all' } ],
         'arrow-spacing': 2,
         'no-inner-declarations': 0,
-        'require-atomic-updates': 0
+        'require-atomic-updates': 0,
+        'unicorn/filename-case': 0,
+        'unicorn/prevent-abbreviations': 1
     },
     'env': {
         'es6': true,
@@ -34,10 +36,11 @@ module.exports = {
     'extends': [
         'eslint:recommended',
         'plugin:import/errors',
-        'plugin:import/warnings'
+        'plugin:import/warnings',
+        'plugin:unicorn/recommended'
     ],
     'parserOptions': {
-        'ecmaVersion': 2019,
+        'ecmaVersion': 2020,
         'sourceType': 'module'
     },
     'overrides': [

@@ -79,9 +79,9 @@
     const { session } = stores()
 
     const form_rules = {
-    	name(val) {
-    		if (!val) return 'Required'
-    		return val.indexOf(' ') < 0 || 'Cannot have whitespaces'
+    	name(value) {
+    		if (!value) return 'Required'
+    		return !value.includes(' ') || 'Cannot have whitespaces'
     	}
     }
 

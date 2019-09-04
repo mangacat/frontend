@@ -67,10 +67,10 @@
     }
 
     onMount(() => {
-    	const e = document.createElement('script')
-    	e.src = 'https://www.google.com/recaptcha/api.js?onload=recaptchaOnload&render=explicit'
-    	document.head.appendChild(e)
+    	const recaptchaElement = document.createElement('script')
+    	recaptchaElement.src = 'https://www.google.com/recaptcha/api.js?onload=recaptchaOnload&render=explicit'
+    	document.head.append(recaptchaElement)
 
-    	return () => { document.head.removeChild(e) }
+    	return () => { document.head.removeChild(recaptchaElement) }
     })
 </script>

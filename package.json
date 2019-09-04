@@ -41,6 +41,7 @@
     "eslint-formatter-pretty": "^2.1.1",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-svelte3": "^2.7.3",
+    "eslint-plugin-unicorn": "^10.0.0",
     "formee": "^1.0.0",
     "popper.js": "^1.15.0",
     "postcss": "^7.0.17",
