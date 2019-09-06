@@ -31,29 +31,36 @@
             <label class="block sm:flex my-3">
                 <span class="sm:inline-flex sm:w-1/3 font-bold items-center text-sm justify-end pr-4">Mugshot</span>
                 <div class="w-full sm:w-2/3 mt-1 sm:mt-0 flex">
-                    <img alt="mugshot image" class="w-16 h-16 object-cover object-center rounded-full" src="https://github.com/daszgfz.png" />
-                    <div class="flex items-center ml-4 relative">
-                        <input type="file" accept="image/jpeg,image/png,image/gif" class="opacity-0 absolute top-0 left-0 h-0 w-0">
-                        <div class="bg-gray-300 hover:bg-gray-200 font-bold text-sm py-1 px-3 rounded cursor-pointer">Change</div>
+                    {#if mugshot.length !== 0}
+                        <img alt="mugshot image" class="w-16 h-16 object-cover object-center rounded-full cursor-pointer mr-4" src="{mugshot}" />
+                    {/if}
+                    <div class="flex items-center relative cursor-pointer">
+                        <input bind:files={mugshotFile} type="file" accept="image/jpeg,image/png,image/gif" class="opacity-0 absolute top-0 left-0 h-0 w-0">
+                        <div class="bg-gray-300 hover:bg-gray-200 font-bold text-sm py-1 px-3 rounded">Change</div>
                     </div>
                 </div>
             </label>
             <label class="block sm:flex my-3">
                 <span class="sm:inline-flex sm:w-1/3 font-bold items-center text-sm justify-end pr-4">Cover</span>
                 <div class="w-full sm:w-2/3 mt-1 sm:mt-0 flex">
-                    <img alt="cover image" class="w-64 h-36 object-cover object-center rounded-lg" src="https://w.wallhaven.cc/full/4v/wallhaven-4v7zrm.png" />
-                    <div class="flex items-center ml-4 relative">
-                        <input type="file" accept="image/jpeg,image/png,image/gif" class="opacity-0 absolute top-0 left-0 h-0 w-0">
-                        <div class="bg-gray-300 hover:bg-gray-200 font-bold text-sm py-1 px-3 rounded cursor-pointer">Change</div>
+                    {#if cover.length !== 0}
+                        <img alt="cover image" class="w-64 h-32 object-cover object-center rounded-lg cursor-pointer mr-4" src="{cover}" />
+                    {/if}
+                    <div class="flex items-center relative cursor-pointer">
+                        <input bind:files={coverFile} type="file" accept="image/jpeg,image/png,image/gif" class="opacity-0 absolute top-0 left-0 h-0 w-0">
+                        <div class="bg-gray-300 hover:bg-gray-200 font-bold text-sm py-1 px-3 rounded">Change</div>
                     </div>
                 </div>
             </label>
             <label class="block sm:flex my-3">
                 <span class="sm:inline-flex sm:w-1/3 font-bold items-center text-sm justify-end pr-4">Username</span>
-                <input bind:value={username} class="w-full sm:w-2/3 form-input mt-1 block" placeholder="johndoe">
+                <div class="flex w-full sm:w-2/3">
+                    <div class="form-input mt-1 border-r-0 rounded-r-none bg-gray-100 text-gray-700">manga.cat/user/{$session.user.id}/</div>
+                    <input bind:value={username} class="form-input mt-1 block rounded-l-none" placeholder="johndoe">
+                </div>
             </label>
             <label class="block sm:flex my-3">
-                <span class="sm:inline-flex sm:w-1/3 font-bold mt-3 text-sm justify-end pr-4">Description</span>
+                <span class="sm:inline-flex sm:w-1/3 font-bold items-center text-sm justify-end pr-4">Description</span>
                 <textarea bind:value={description} class="form-textarea mt-1 block w-full sm:w-2/3" rows="3"></textarea>
             </label>
         </div>
@@ -75,7 +82,7 @@
 
 <div class="fixed z-100 bottom-0 inset-x-0 bg-white dark:bg-gray-700 dark:border-gray-900 border-t border-gray-300">
     <div class="max-w-3xl mx-auto my-4 flex justify-end">
-        <button class="bg-gray-300 hover:bg-gray-200 font-semibold py-2 px-4 rounded mr-4" type="button">Cancel</button>
+        <button on:click={() => {goto('/')}} class="bg-gray-300 hover:bg-gray-200 font-semibold py-2 px-4 rounded mr-4" type="button">Cancel</button>
         <button class="bg-gray-800 hover:bg-gray-700 text-gray-200 font-semibold py-2 px-4 rounded" type="button">Save</button>
     </div>
 </div>
@@ -88,14 +95,32 @@
 
 <script>
     import { onMount } from 'svelte'
-    import { stores } from '@sapper/app'
+    import { stores, goto } from '@sapper/app'
 
     const { session } = stores()
 
-    let email = $session.user.email || ''
+    let email = $session.user.email
     let language = ''
-    let username = $session.user.username || ''
-    let description = $session.user.description || ''
+    let username = $session.user.username
+    let description = $session.user.description
+    let mugshot = $session.user.mugshot
+    let mugshotFile
+    let coverFile
+    let cover = $session.user.cover
+
+    function readFileAsync(img) {
+    	return new Promise((resolve, reject) => {
+    		const reader = new FileReader()
+    		reader.addEventListener('load', event => {
+    			resolve(event.target.result)
+    		})
+    		reader.addEventListener('error', reject)
+    		reader.readAsDataURL(img)
+    	})
+    }
+
+    $: mugshotFile && mugshotFile.length === 1 && readFileAsync(mugshotFile[0]).then(url => mugshot = url)
+    $: coverFile && coverFile.length === 1 && readFileAsync(coverFile[0]).then(url => cover = url)
 
     onMount(() => {
     	document.body.classList.add('mb-16')
