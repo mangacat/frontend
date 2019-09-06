@@ -14,23 +14,31 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@v1
       with:
         fetch-depth: 1
     - uses: actions/setup-node@v1
       with:
-        version: 12
+        node-version: 12
 
     - name: Install
-      run: npm ci
+      run: npm ci --ignore-scripts
 
-    - name: Test
-      run: npm test
+    - name: Build
+      run: npm run build
       env:
         SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
         SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
         GOOGLE_RECAPTCHA_SITEKEY: ${{ secrets.GOOGLE_RECAPTCHA_SITEKEY }}
         GOOGLE_ANALYTICS_ID: ${{ secrets.GOOGLE_ANALYTICS_ID }}
+
+    # - name: Test
+    #   run: npm test
+    #   env:
+    #     SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
+    #     SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+    #     GOOGLE_RECAPTCHA_SITEKEY: ${{ secrets.GOOGLE_RECAPTCHA_SITEKEY }}
+    #     GOOGLE_ANALYTICS_ID: ${{ secrets.GOOGLE_ANALYTICS_ID }}
       
     - name: Lint
       run: npm run lint

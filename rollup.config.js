@@ -1,6 +1,5 @@
 import 'dotenv/config'
 import pkg from './package.json'
-import babel from 'rollup-plugin-babel'
 import svelte from 'rollup-plugin-svelte'
 import replace from 'rollup-plugin-replace'
 import config from 'sapper/config/rollup.js'
@@ -10,12 +9,18 @@ import resolve from 'rollup-plugin-node-resolve'
 
 const mode = process.env.NODE_ENV
 const dev = mode === 'development'
-const legacy = !!process.env.SAPPER_LEGACY_BUILD
-
 const { preprocess } = require('./svelte.config.js')
 
 const onwarn = (warning, onwarn) => (warning.code === 'CIRCULAR_DEPENDENCY' &&  /[/\\]@sapper[/\\]/.test(warning.message)) || onwarn(warning)
 const dedupe = importee => importee === 'svelte' || importee.startsWith('svelte/')
+
+const revision = require('child_process').execSync('git rev-parse HEAD').toString().trim()
+
+console.time('Built CSS in')
+const { css } = require('./scripts/postcss.js')
+Promise
+	.resolve(css())
+	.then(() => console.timeEnd('Built CSS in'))
 
 export default {
 	client: {
@@ -27,7 +32,8 @@ export default {
 				'process.env.NODE_ENV': JSON.stringify(mode),
 				'process.env.GOOGLE_ANALYTICS_ID': JSON.stringify(process.env.GOOGLE_ANALYTICS_ID),
 				'process.env.GOOGLE_RECAPTCHA_SITEKEY': JSON.stringify(process.env.GOOGLE_RECAPTCHA_SITEKEY),
-				'process.env.SENTRY_DSN': JSON.stringify(process.env.SENTRY_DSN)
+				'process.env.SENTRY_DSN': JSON.stringify(process.env.SENTRY_DSN),
+				'process.env.REVISION': JSON.stringify(revision)
 			}),
 			svelte({
 				dev,
@@ -36,24 +42,6 @@ export default {
 			}),
 			resolve({ browser: true, dedupe }),
 			commonjs(),
-
-			legacy && babel({
-				extensions: ['.js', '.mjs', '.html', '.svelte'],
-				runtimeHelpers: true,
-				exclude: ['node_modules/@babel/**'],
-				presets: [
-					['@babel/preset-env', { 
-						targets: "> 0.25%, not dead"
-					}]
-				],
-				plugins: [
-					'@babel/plugin-syntax-dynamic-import',
-					['@babel/plugin-transform-runtime', {
-						useESModules: true
-					}]
-				]
-			}),
-
 			!dev && terser({ module: true }),
 		],
 		onwarn
@@ -70,7 +58,8 @@ export default {
 				'process.env.SENTRY_DSN': JSON.stringify(process.env.SENTRY_DSN),
 				'process.env.REDIS_HOST': JSON.stringify(process.env.REDIS_HOST),
 				'process.env.REDIS_PORT': JSON.stringify(process.env.REDIS_PORT),
-				'process.env.REDIS_PASS': JSON.stringify(process.env.REDIS_PASS)
+				'process.env.REDIS_PASS': JSON.stringify(process.env.REDIS_PASS),
+				'process.env.REVISION': JSON.stringify(revision)
 			}),
 			svelte({
 				dev,
