@@ -32,13 +32,13 @@ jobs:
         GOOGLE_RECAPTCHA_SITEKEY: ${{ secrets.GOOGLE_RECAPTCHA_SITEKEY }}
         GOOGLE_ANALYTICS_ID: ${{ secrets.GOOGLE_ANALYTICS_ID }}
 
-    - name: Test
-      run: npm test
-      env:
-        SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
-        SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
-        GOOGLE_RECAPTCHA_SITEKEY: ${{ secrets.GOOGLE_RECAPTCHA_SITEKEY }}
-        GOOGLE_ANALYTICS_ID: ${{ secrets.GOOGLE_ANALYTICS_ID }}
+    # - name: Test
+    #   run: npm test
+    #   env:
+    #     SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
+    #     SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+    #     GOOGLE_RECAPTCHA_SITEKEY: ${{ secrets.GOOGLE_RECAPTCHA_SITEKEY }}
+    #     GOOGLE_ANALYTICS_ID: ${{ secrets.GOOGLE_ANALYTICS_ID }}
       
     - name: Lint
       run: npm run lint
