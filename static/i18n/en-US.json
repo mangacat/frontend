@@ -1,0 +1,13 @@
+{
+	"advanced_search": "advanced search",
+	"login": "login",
+	"logout": "logout",
+	"no_results": "no results found for {term}",
+	"privacy": "privacy",
+	"profile": "profile",
+	"register": "register",
+	"search": "search",
+	"select": "select",
+	"settings": "settings",
+	"terms": "terms"
+}
