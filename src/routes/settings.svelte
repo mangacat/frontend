@@ -54,12 +54,12 @@
             <label class="block sm:flex my-4">
                 <span class="sm:inline-flex sm:w-1/3 font-bold items-center text-sm justify-end pr-4">Mugshot</span>
                 <div class="w-full sm:w-2/3 mt-1 sm:mt-0 flex">
-                    {#if mugshotSrc.length !== 0}
-                        <img alt="mugshot image" class="w-16 h-16 object-cover object-center rounded-full cursor-pointer mr-4" src="{mugshotSrc}" />
+                    {#if mugshot.src.length !== 0}
+                        <img alt="mugshot image" class="w-16 h-16 object-cover object-center rounded-full cursor-pointer mr-4" src="{mugshot.src}" />
                     {/if}
                     <div class="flex items-center relative cursor-pointer">
-                        <input bind:this={mugshotFileInputElem} bind:files={mugshotFileInput} id="mugshot" type="file" accept="image/jpeg,image/png,image/gif" class="opacity-0 absolute top-0 left-0 h-0 w-0">
-                        <PrimaryButton on:click={() => {mugshotFileInputElem.click()}} class="dark:bg-gray-700">
+                        <input bind:this={mugshotInput} on:change={({ target: { files } }) => fileInput('mugshot', files[0])} type="file" accept="image/jpeg,image/png,image/gif" class="opacity-0 absolute top-0 left-0 h-0 w-0">
+                        <PrimaryButton on:click={() => mugshotInput.click()} class="dark:bg-gray-700">
                             Upload
                         </PrimaryButton>
                     </div>
@@ -68,12 +68,12 @@
             <label class="block sm:flex my-4">
                 <span class="sm:inline-flex sm:w-1/3 font-bold items-center text-sm justify-end pr-4">Cover</span>
                 <div class="w-full sm:w-2/3 mt-1 sm:mt-0 flex">
-                    {#if coverSrc.length !== 0}
-                        <img alt="cover image" class="w-64 h-32 object-cover object-center rounded-lg cursor-pointer mr-4" src="{coverSrc}" />
+                    {#if cover.src.length !== 0}
+                        <img alt="cover image" class="w-64 h-32 object-cover object-center rounded-lg cursor-pointer mr-4" src="{cover.src}" />
                     {/if}
                     <div class="flex items-center relative cursor-pointer">
-                        <input bind:this={coverFileInputElem} bind:files={coverFileInput} id="cover" type="file" accept="image/jpeg,image/png,image/gif" class="opacity-0 absolute top-0 left-0 h-0 w-0">
-                        <PrimaryButton on:click={() => {coverFileInputElem.click()}} class="dark:bg-gray-700">
+                        <input bind:this={coverInput} on:change={({ target: { files } }) => fileInput('cover', files[0])} id="cover" type="file" accept="image/jpeg,image/png,image/gif" class="opacity-0 absolute top-0 left-0 h-0 w-0">
+                        <PrimaryButton on:click={() => coverInput.click()} class="dark:bg-gray-700">
                             Upload
                         </PrimaryButton>
                     </div>
@@ -134,6 +134,7 @@
     import SecondaryButton from 'components/Buttons/Secondary.svelte'
     import Input from 'components/Inputs/Input.svelte'
     import Textarea from 'components/Inputs/Textarea.svelte'
+
     let notifications
 
     const { session } = stores()
@@ -142,20 +143,24 @@
     let language = ''
     let username = $session.user.username
     let description = $session.user.description
-    let mugshotSrc = 'https://github.com/daszgfz.png'
-    let mugshotFileInputElem
-    let mugshotFileInput
-    let mugshotFile
-    let coverFile
-    let coverFileInput
-    let coverFileInputElem
-    let coverSrc = 'https://w.wallhaven.cc/full/4v/wallhaven-4v7zrm.png'
+    let mugshot = {
+    	src: 'https://github.com/daszgfz.png',
+    	file: null
+    }
+    let mugshotInput
+    let cover = {
+    	src: 'https://w.wallhaven.cc/full/4v/wallhaven-4v7zrm.png',
+    	file: null
+    }
+    let coverInput
     let oldPassword
     let newPassword
     let newPasswordConfirm
 
     function readFileAsync(img) {
     	return new Promise((resolve, reject) => {
+    		img.size > 3000000 && reject(new Error(`Selected image is too big (3 Mb max)`))
+
     		const reader = new FileReader()
     		reader.addEventListener('load', event => {
     			resolve(event.target.result)
@@ -165,39 +170,65 @@
     	})
     }
 
-    function submit() {
-    	const formData = new FormData()
-    	Object
-    		.entries({
-    			...(email !== $session.user.email && { email }),
-    			language,
-    			...(username !== $session.user.username && { username }),
-    			...(description !== $session.user.description && { description }),
-    			...(mugshotFile && { mugshot: mugshotFile }),
-    			...(coverFile && { cover: coverFile })
-    		})
-    		.forEach(([key, value]) => formData.append(key, value))
-
-    	const xhr = new XMLHttpRequest()
-
-    	xhr.addEventListener('load', () => {
-    		if (xhr.status === 200) {
-    			notifications.success('Settings saved successfully')
-    			console.log(JSON.parse(xhr.response))
-    		}
-    	})
-
-    	xhr.open('POST', `https://httpbin.org/post`)
-
-    	xhr.send(formData)
+    async function fileInput(variable, file) {
+    	try {
+    		const src = await readFileAsync(file)
+    		variable === 'cover' && (cover = { src, file })
+    		variable === 'mugshot' && (mugshot = { src, file })
+    	} catch ({ message }) {
+    		notifications.error(message)
+    	}
     }
 
-    $: mugshotFileInput && mugshotFileInput.length === 1 && (mugshotFile = mugshotFileInput[0]) && readFileAsync(mugshotFile).then(url => mugshotSrc = url)
-    $: coverFileInput && coverFileInput.length === 1 && (coverFile = coverFileInput[0]) && readFileAsync(coverFile).then(url => coverSrc = url)
+    function verifyForm() {
+    	return new Promise((resolve, reject) => {
+    		oldPassword.length === 0 && reject(new Error(`Please enter your old password`))
+    		newPassword !== newPasswordConfirm && reject(new Error(`New passwords don't match`))
+    		!/.+@.+\..+/.test(email) && reject(new Error(`Invalid email`))
+    		username.indexOf(' ') > 0 && reject(new Error(`Username cannot have whitespaces`))
+    		username.length === 0 && reject(new Error(`Username cannot be empty`))
+            
+    		resolve()
+    	})
+    }
+
+    async function submit() {
+    	try {
+    		await verifyForm()
+            
+    		const formData = new FormData()
+    		Object
+    			.entries({
+    				...(email !== $session.user.email && { email }),
+    				language,
+    				...(username !== $session.user.username && { username }),
+    				...(description !== $session.user.description && { description }),
+    				...(mugshot.file !== null && { mugshot: mugshot.file }),
+    				...(cover.file !== null && { cover: cover.file }),
+    				...(newPassword.length > 0 && { old_password: oldPassword, password: newPassword, confirmed_password: newPasswordConfirm })
+    			})
+    			.forEach(([key, value]) => formData.append(key, value))
+
+    		const xhr = new XMLHttpRequest()
+
+    		xhr.addEventListener('load', () => {
+    			if (xhr.status === 200) {
+    				notifications.success('Settings saved successfully')
+    				console.log(JSON.parse(xhr.response))
+    			}
+    		})
+
+    		xhr.open('POST', `https://httpbin.org/post`)
+
+    		xhr.send(formData)            
+    	} catch ({ message }) {
+    		notifications.error(message)
+    	}
+    }
 
     onMount(() => {
     	document.body.classList.add('mb-16')
 
-    	return () => { document.body.classList.remove('mb-16') }
+    	return () => document.body.classList.remove('mb-16')
     })
 </script>
