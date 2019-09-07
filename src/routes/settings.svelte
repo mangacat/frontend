@@ -15,11 +15,11 @@
         <div class="py-4 px-5 bg-gray-100 dark:bg-gray-800">
             <label class="block sm:flex my-4">
                 <span class="sm:inline-flex sm:w-1/3 font-bold items-center text-sm justify-end pr-4">Email address</span>
-                <input bind:value={email} class="w-full sm:w-2/3 form-input mt-1 block" placeholder="johndoe@example.com">
+                <Input bind:value={email} class="w-full sm:w-2/3" type="email" placeholder="johndoe@example.com" />
             </label>
             <label class="block sm:flex my-4">
                 <span class="sm:inline-flex sm:w-1/3 font-bold items-center text-sm justify-end pr-4">Language</span>
-                <input bind:value={language} class="w-full sm:w-2/3 form-input mt-1 block" placeholder="English">
+                <Input bind:value={language} class="w-full sm:w-2/3" placeholder="English" />
             </label>
         </div>
     </div>
@@ -32,15 +32,15 @@
         <div class="py-4 px-5 bg-gray-100 dark:bg-gray-800">
             <label class="block sm:flex my-4">
                 <span class="sm:inline-flex sm:w-1/3 font-bold items-center text-sm justify-end pr-4">Old password</span>
-                <input bind:value={oldPassword} type="password" class="w-full sm:w-2/3 form-input mt-1 block" placeholder="••••••••">
+                <Input bind:value={oldPassword} class="w-full sm:w-2/3" type="password" placeholder="••••••••" />
             </label>
             <label class="block sm:flex my-4">
                 <span class="sm:inline-flex sm:w-1/3 font-bold items-center text-sm justify-end pr-4">New password</span>
-                <input bind:value={newPassword} type="password"class="w-full sm:w-2/3 form-input mt-1 block" placeholder="••••••••">
+                <Input bind:value={newPassword} class="w-full sm:w-2/3" type="password" placeholder="••••••••" />
             </label>
             <label class="block sm:flex my-4">
                 <span class="sm:inline-flex sm:w-1/3 font-bold items-center text-sm justify-end pr-4">Confirm new password</span>
-                <input bind:value={newPasswordConfirm} type="password" class="w-full sm:w-2/3 form-input mt-1 block" placeholder="••••••••">
+                <Input bind:value={newPasswordConfirm} class="w-full sm:w-2/3" type="password" placeholder="••••••••" />
             </label>
         </div>
     </div>
@@ -82,13 +82,13 @@
             <label class="block sm:flex my-4">
                 <span class="sm:inline-flex sm:w-1/3 font-bold items-center text-sm justify-end pr-4">Username</span>
                 <div class="flex w-full sm:w-2/3">
-                    <div class="form-input mt-1 border-r-0 rounded-r-none bg-gray-100 text-gray-700">manga.cat/user/{$session.user.id}/</div>
-                    <input bind:value={username} class="form-input mt-1 block rounded-l-none" placeholder="johndoe">
+                    <div class="form-input border-r-0 rounded-r-none dark:bg-gray-800 dark:text-gray-400 dark:border-gray-900 bg-gray-100 text-gray-700">manga.cat/user/{$session.user.id}/</div>
+                    <Input bind:value={username} class="rounded-l-none" placeholder="johndoe" />
                 </div>
             </label>
             <label class="block sm:flex my-4">
                 <span class="sm:inline-flex sm:w-1/3 font-bold items-center text-sm justify-end pr-4">Description</span>
-                <textarea bind:value={description} class="form-textarea mt-1 block w-full sm:w-2/3" rows="3"></textarea>
+                <Textarea bind:value={description} class="w-full sm:w-2/3" rows="3" />
             </label>
         </div>
     </div>
@@ -132,6 +132,8 @@
     import Notifications from 'components/Notifications.svelte'
     import PrimaryButton from 'components/Buttons/Primary.svelte'
     import SecondaryButton from 'components/Buttons/Secondary.svelte'
+    import Input from 'components/Inputs/Input.svelte'
+    import Textarea from 'components/Inputs/Textarea.svelte'
     let notifications
 
     const { session } = stores()
