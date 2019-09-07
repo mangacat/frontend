@@ -83,7 +83,7 @@
                 <span class="sm:inline-flex sm:w-1/3 font-bold items-center text-sm justify-end pr-4">Username</span>
                 <div class="flex w-full sm:w-2/3">
                     <div class="form-input border-r-0 rounded-r-none dark:bg-gray-800 dark:text-gray-400 dark:border-gray-900 bg-gray-100 text-gray-700">manga.cat/user/{$session.user.id}/</div>
-                    <Input bind:value={username} class="rounded-l-none" placeholder="johndoe" />
+                    <Input bind:value={username} class="rounded-l-none flex-grow" placeholder="johndoe" />
                 </div>
             </label>
             <label class="block sm:flex my-4">
