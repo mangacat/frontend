@@ -2,8 +2,6 @@
 <title>Settings - MangaCat</title>
 </svelte:head>
 
-<Notifications bind:this={notifications} />
-
 <div class="max-w-3xl mx-auto">
 	<h1 class="font-semibold text-xl px-5 pt-1 mt-4">Account Settings</h1>
 
@@ -129,13 +127,11 @@
 <script>
 	import { onMount } from 'svelte'
 	import { stores, goto } from '@sapper/app'
-	import Notifications from 'components/Notifications.svelte'
+	import { notify } from 'stores.js'
 	import PrimaryButton from 'components/Buttons/Primary.svelte'
 	import SecondaryButton from 'components/Buttons/Secondary.svelte'
 	import Input from 'components/Inputs/Input.svelte'
 	import Textarea from 'components/Inputs/Textarea.svelte'
-
-	let notifications
 
 	const { session } = stores()
 
@@ -176,7 +172,7 @@
 			variable === 'cover' && (cover = { src, file })
 			variable === 'mugshot' && (mugshot = { src, file })
 		} catch ({ message }) {
-			notifications.error(message)
+			$notify.error(message)
 		}
 	}
 
@@ -213,7 +209,7 @@
 
 			xhr.addEventListener('load', () => {
 				if (xhr.status === 200) {
-					notifications.success('Settings saved successfully')
+					$notify.success('Settings saved successfully')
 					console.log(JSON.parse(xhr.response))
 				}
 			})
@@ -222,7 +218,7 @@
 
 			xhr.send(formData)            
 		} catch ({ message }) {
-			notifications.error(message)
+			$notify.error(message)
 		}
 	}
 
