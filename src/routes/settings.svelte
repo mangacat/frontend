@@ -7,7 +7,7 @@
 <div class="max-w-3xl mx-auto">
     <h1 class="font-semibold text-xl px-5 pt-1 mt-4">Account Settings</h1>
 
-    <div class="rounded-lg overflow-hidden shadow-md mt-4">
+    <div class="rounded-lg overflow-hidden shadow-lg mt-4">
         <div class="py-4 px-5 bg-white dark:bg-gray-700">
             <h2>Basic Information</h2>
             <h3 class="text-sm">Set your login preferences, help us personalize your experience, and make big account changes here.</h3>
@@ -24,7 +24,7 @@
         </div>
     </div>
 
-    <div class="rounded-lg overflow-hidden shadow-md mt-8">
+    <div class="rounded-lg overflow-hidden shadow-lg mt-8">
         <div class="py-4 px-5 bg-white dark:bg-gray-700">
             <h2>Security</h2>
             <h3 class="text-sm">Make changes to increase your account security.</h3>
@@ -45,7 +45,7 @@
         </div>
     </div>
 
-    <div class="rounded-lg overflow-hidden shadow-md mt-8">
+    <div class="rounded-lg overflow-hidden shadow-lg mt-8">
         <div class="py-4 px-5 bg-white dark:bg-gray-700">
             <h2>Profile</h2>
             <h3 class="text-sm">Public information visible to other users on the site.</h3>
@@ -93,7 +93,7 @@
         </div>
     </div>
 
-    <div class="rounded-lg overflow-hidden shadow-md mt-8 mb-6">
+    <div class="rounded-lg overflow-hidden shadow-lg mt-8 mb-6">
         <div class="py-4 px-5 bg-white dark:bg-gray-700">
             <h2>Danger Zone</h2>
             <h3 class="text-sm">These options can have unintended side effects.</h3>
