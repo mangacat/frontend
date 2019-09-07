@@ -2,6 +2,8 @@
     <title>Settings - MangaCat</title>
 </svelte:head>
 
+<Notifications bind:this={notifications} />
+
 <div class="max-w-3xl mx-auto">
     <h1 class="font-semibold text-xl px-5 pt-1 mt-4">Account Settings</h1>
 
@@ -24,6 +26,27 @@
 
     <div class="rounded-lg overflow-hidden shadow-md mt-8">
         <div class="py-4 px-5 bg-white dark:bg-gray-700">
+            <h2>Security</h2>
+            <h3 class="text-sm">Make changes to increase your account security.</h3>
+        </div>
+        <div class="py-4 px-5 bg-gray-100 dark:bg-gray-800">
+            <label class="block sm:flex my-4">
+                <span class="sm:inline-flex sm:w-1/3 font-bold items-center text-sm justify-end pr-4">Old password</span>
+                <input bind:value={oldPassword} type="password" class="w-full sm:w-2/3 form-input mt-1 block" placeholder="••••••••">
+            </label>
+            <label class="block sm:flex my-4">
+                <span class="sm:inline-flex sm:w-1/3 font-bold items-center text-sm justify-end pr-4">New password</span>
+                <input bind:value={newPassword} type="password"class="w-full sm:w-2/3 form-input mt-1 block" placeholder="••••••••">
+            </label>
+            <label class="block sm:flex my-4">
+                <span class="sm:inline-flex sm:w-1/3 font-bold items-center text-sm justify-end pr-4">Confirm new password</span>
+                <input bind:value={newPasswordConfirm} type="password" class="w-full sm:w-2/3 form-input mt-1 block" placeholder="••••••••">
+            </label>
+        </div>
+    </div>
+
+    <div class="rounded-lg overflow-hidden shadow-md mt-8">
+        <div class="py-4 px-5 bg-white dark:bg-gray-700">
             <h2>Profile</h2>
             <h3 class="text-sm">Public information visible to other users on the site.</h3>
         </div>
@@ -31,8 +54,8 @@
             <label class="block sm:flex my-4">
                 <span class="sm:inline-flex sm:w-1/3 font-bold items-center text-sm justify-end pr-4">Mugshot</span>
                 <div class="w-full sm:w-2/3 mt-1 sm:mt-0 flex">
-                    {#if mugshot.length !== 0}
-                        <img alt="mugshot image" class="w-16 h-16 object-cover object-center rounded-full cursor-pointer mr-4" src="{mugshot}" />
+                    {#if mugshotSrc.length !== 0}
+                        <img alt="mugshot image" class="w-16 h-16 object-cover object-center rounded-full cursor-pointer mr-4" src="{mugshotSrc}" />
                     {/if}
                     <div class="flex items-center relative cursor-pointer">
                         <input bind:files={mugshotFileInput} type="file" accept="image/jpeg,image/png,image/gif" class="opacity-0 absolute top-0 left-0 h-0 w-0">
@@ -43,8 +66,8 @@
             <label class="block sm:flex my-4">
                 <span class="sm:inline-flex sm:w-1/3 font-bold items-center text-sm justify-end pr-4">Cover</span>
                 <div class="w-full sm:w-2/3 mt-1 sm:mt-0 flex">
-                    {#if cover.length !== 0}
-                        <img alt="cover image" class="w-64 h-32 object-cover object-center rounded-lg cursor-pointer mr-4" src="{cover}" />
+                    {#if coverSrc.length !== 0}
+                        <img alt="cover image" class="w-64 h-32 object-cover object-center rounded-lg cursor-pointer mr-4" src="{coverSrc}" />
                     {/if}
                     <div class="flex items-center relative cursor-pointer">
                         <input bind:files={coverFileInput} type="file" accept="image/jpeg,image/png,image/gif" class="opacity-0 absolute top-0 left-0 h-0 w-0">
@@ -81,9 +104,9 @@
 </div>
 
 <div class="fixed z-100 bottom-0 inset-x-0 bg-white dark:bg-gray-700 dark:border-gray-900 border-t border-gray-300">
-    <div class="max-w-3xl mx-auto my-4 flex justify-end">
+    <div class="max-w-3xl mx-4 md:mx-auto my-4 flex justify-end">
         <button on:click={() => {goto('/')}} class="bg-gray-300 hover:bg-gray-200 font-semibold py-2 px-4 rounded mr-4" type="button">Cancel</button>
-        <button on:click={submit} class="bg-gray-800 hover:bg-gray-700 text-gray-200 font-semibold py-2 px-4 rounded" type="button">Save</button>
+        <button on:click|once={submit} class="bg-gray-800 hover:bg-gray-700 text-gray-200 font-semibold py-2 px-4 rounded" type="button">Save</button>
     </div>
 </div>
 
@@ -96,6 +119,8 @@
 <script>
     import { onMount } from 'svelte'
     import { stores, goto } from '@sapper/app'
+    import Notifications from 'components/Notifications.svelte'
+    let notifications
 
     const { session } = stores()
 
@@ -103,12 +128,15 @@
     let language = ''
     let username = $session.user.username
     let description = $session.user.description
-    let mugshot = 'https://github.com/daszgfz.png'
+    let mugshotSrc = 'https://github.com/daszgfz.png'
     let mugshotFileInput
     let mugshotFile
     let coverFile
     let coverFileInput
-    let cover = 'https://w.wallhaven.cc/full/4v/wallhaven-4v7zrm.png'
+    let coverSrc = 'https://w.wallhaven.cc/full/4v/wallhaven-4v7zrm.png'
+    let oldPassword
+    let newPassword
+    let newPasswordConfirm
 
     function readFileAsync(img) {
     	return new Promise((resolve, reject) => {
@@ -122,21 +150,34 @@
     }
 
     function submit() {
-    	const object = {
-    		...(email !== $session.user.email && { email }),
-    		language,
-    		...(username !== $session.username && { username }),
-    		...(description !== $session.user.description && { description }),
-    		...(mugshotFile && { mugshotFile }),
-    		...(coverFile && { coverFile })
-    	}
-        
     	const formData = new FormData()
-    	Object.keys(object).forEach(key => formData.append(key, object[key]))
+    	Object
+    		.entries({
+    			...(email !== $session.user.email && { email }),
+    			language,
+    			...(username !== $session.user.username && { username }),
+    			...(description !== $session.user.description && { description }),
+    			...(mugshotFile && { mugshot: mugshotFile }),
+    			...(coverFile && { cover: coverFile })
+    		})
+    		.forEach(([key, value]) => formData.append(key, value))
+
+    	const xhr = new XMLHttpRequest()
+
+    	xhr.addEventListener('load', () => {
+    		if (xhr.status === 200) {
+    			notifications.success('Settings saved successfully')
+    			console.log(JSON.parse(xhr.response))
+    		}
+    	})
+
+    	xhr.open('POST', `https://httpbin.org/post`)
+
+    	xhr.send(formData)
     }
 
-    $: mugshotFileInput && mugshotFileInput.length === 1 && (mugshotFile = mugshotFileInput[0]) && readFileAsync(mugshotFile).then(url => mugshot = url)
-    $: coverFileInput && coverFileInput.length === 1 && (mugshotFile = mugshotFileInput[0]) && readFileAsync(coverFile).then(url => cover = url)
+    $: mugshotFileInput && mugshotFileInput.length === 1 && (mugshotFile = mugshotFileInput[0]) && readFileAsync(mugshotFile).then(url => mugshotSrc = url)
+    $: coverFileInput && coverFileInput.length === 1 && (coverFile = coverFileInput[0]) && readFileAsync(coverFile).then(url => coverSrc = url)
 
     onMount(() => {
     	document.body.classList.add('mb-16')
