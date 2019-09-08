@@ -1,5 +1,5 @@
 <svelte:head>
-<title>Settings - MangaCat</title>
+	<title>Settings - MangaCat</title>
 </svelte:head>
 
 <div class="max-w-3xl mx-auto">
