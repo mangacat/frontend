@@ -45,11 +45,7 @@ jobs:
     
     - name: Deploy
       if: github.repository == 'mangacat/frontend' && github.event_name == 'push'
-      uses: pangzineng/Github-Action-One-Click-Docker@master
-      env:
-        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-        DOCKER_REGISTRY_URL: ${{ secrets.DOCKER_REGISTRY_URL }}
-        DOCKER_IMAGE_NAME: ${{ secrets.DOCKER_IMAGE_NAME }}
-        DOCKER_IMAGE_TAG: ${{ secrets.DOCKER_IMAGE_TAG }}
-        DOCKER_NAMESPACE: ${{ secrets.DOCKER_NAMESPACE }}
+      run: |
+        docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }} ${{ secrets.DOCKER_REGISTRY_URL }}
+        docker build -t ${{ secrets.DOCKER_REGISTRY_URL }}/${{ secrets.DOCKER_NAMESPACE }}/${{ secrets.DOCKER_IMAGE_NAME }} .
+        docker push ${{ secrets.DOCKER_REGISTRY_URL }}/${{ secrets.DOCKER_NAMESPACE }}/${{ secrets.DOCKER_IMAGE_NAME }}

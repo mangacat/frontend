@@ -60,13 +60,13 @@
             {series.description}
         </p>
         <ul class="flex border-b border-gray-500 dark:border-gray-600 mt-4">
-            <li class="{activeLink === '' ? 'font-bold border-b border-gray-700 dark:border-gray-400' : ''} py-2 mr-4 uppercase tracking-widest text-sm cursor-pointer" style="margin-bottom: -1px;" on:click={() => { activeLink = '' }}>
+            <li class="{activeLink === '' ? 'border-b border-gray-700 dark:border-gray-400' : 'text-gray-600 dark:text-gray-500'} py-2 mr-4 uppercase tracking-widest text-sm cursor-pointer font-bold" style="margin-bottom: -1px;" on:click={() => { activeLink = '' }}>
                 Genres
             </li>
-            <li class="{activeLink === 'crew' ? 'font-bold border-b border-gray-700 dark:border-gray-400' : ''} py-2 mr-4 uppercase tracking-widest text-sm cursor-pointer" style="margin-bottom: -1px;" on:click={() => { activeLink = 'crew' }}>
+            <li class="{activeLink === 'crew' ? 'border-b border-gray-700 dark:border-gray-400' : 'text-gray-600 dark:text-gray-500'} py-2 mr-4 uppercase tracking-widest text-sm cursor-pointer font-bold" style="margin-bottom: -1px;" on:click={() => { activeLink = 'crew' }}>
                 Crew
             </li>
-            <li class="{activeLink === 'details' ? 'font-bold border-b border-gray-700 dark:border-gray-400' : ''} py-2 mr-4 uppercase tracking-widest text-sm cursor-pointer" style="margin-bottom: -1px;" on:click={() => { activeLink = 'details' }}>
+            <li class="{activeLink === 'details' ? 'border-b border-gray-700 dark:border-gray-400' : 'text-gray-600 dark:text-gray-500'} py-2 mr-4 uppercase tracking-widest text-sm cursor-pointer font-bold" style="margin-bottom: -1px;" on:click={() => { activeLink = 'details' }}>
                 Details
             </li>
         </ul>
