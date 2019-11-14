@@ -114,25 +114,25 @@
     const img = wallpaper()
     
     const form_rules = {
-    	username(val) {
-    		if (!val) return 'Required'
-    		return val.indexOf(' ') < 0 || 'Cannot have whitespaces'
+    	username(value) {
+    		if (!value) return 'Required'
+    		return !value.includes(' ') || 'Cannot have whitespaces'
     	},
-    	email(val) {
-    		if (!val) return 'Required'
-    		return /.+@.+\..+/.test(val) || 'Invalid email'
+    	email(value) {
+    		if (!value) return 'Required'
+    		return /.+@.+\..+/.test(value) || 'Invalid email'
     	},
-    	confirmed_email(val, data) {
-    		if (!val) return 'Required'
-    		return val === data.email || 'Must match your email'
+    	confirmed_email(value, data) {
+    		if (!value) return 'Required'
+    		return value === data.email || 'Must match your email'
     	},
-    	password(val) {
-    		if (!val) return 'Required'
-    		return val.length >= 8 || 'Must be at least 8 characters'
+    	password(value) {
+    		if (!value) return 'Required'
+    		return value.length >= 8 || 'Must be at least 8 characters'
     	},
-    	confirmed_password(val, data) {
-    		if (!val) return 'Required'
-    		return val === data.password || 'Must match your password'
+    	confirmed_password(value, data) {
+    		if (!value) return 'Required'
+    		return value === data.password || 'Must match your password'
     	}
     }
 
@@ -174,7 +174,7 @@
 
     		try {
     		    await userSession.register(data)
-    		} catch (err) {
+    		} catch (error) {
     			submitting = false
     			return
     		}

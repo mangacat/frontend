@@ -1,10 +1,10 @@
-export function post(req, res, next) {
-	req.session.destroy(err => {
-		if (err) {
-			console.log(err)
-			return next(err)
+export function post(request, response, next) {
+	request.session.destroy(error => {
+		if (error) {
+			console.log(error)
+			return next(error)
 		}
-		res.setHeader('Content-Type', 'application/json')
-		res.end(JSON.stringify({ ok: true }))
+		response.setHeader('Content-Type', 'application/json')
+		response.end(JSON.stringify({ ok: true }))
 	})
 }

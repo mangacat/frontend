@@ -190,16 +190,16 @@
     let tags_inc = []
     let hentai = false
 
-    const convertArraysToString = obj => {
-    	const newObj = {}
-    	Object.keys(obj).forEach(prop => {
-    		if (Array.isArray(obj[prop])) newObj[prop] = obj[prop].join(',')
-    		else newObj[prop] = obj[prop]
+    const convertArraysToString = object => {
+    	const newObject = {}
+    	Object.keys(object).forEach(property => {
+    		if (Array.isArray(object[property])) newObject[property] = object[property].join(',')
+    		else newObject[property] = object[property]
     	})
-    	return newObj
+    	return newObject
     }
 
-    const tagSearch = (search, options) => { return options.filter(elem => elem.name.toLowerCase().includes(search.toLowerCase())) }
+    const tagSearch = (search, options) => { return options.filter(element => element.name.toLowerCase().includes(search.toLowerCase())) }
 
     async function search() {
     	// TODO: remove activeElement

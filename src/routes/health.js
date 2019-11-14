@@ -1,3 +1,3 @@
-export function get(_, res) {
-	res.end('OK')
+export function get(_, response) {
+	response.end('OK')
 }

@@ -59,20 +59,20 @@
     const { session } = stores()
     let loading = false
 
-    const deleteFile = async (id) => {
+    const deleteFile = async id => {
     	loading = true
     	await api.del(`series_chapters_files/${id}`, $session.user.token)
-    	const res = await api.get(`series_chapters/${$chapter.id}?edit=true`, $session.user.token)
-    	chapter.set(res)
+    	const response = await api.get(`series_chapters/${$chapter.id}?edit=true`, $session.user.token)
+    	chapter.set(response)
     	loading = false
     }
 
     onMount(() => {
     	const e = document.createElement('script')
     	e.src = 'https://unpkg.com/dropzone@5.5.1/dist/min/dropzone.min.js'
-    	document.head.appendChild(e)
+    	document.head.append(e)
 
-    	e.onload = () => {
+    	e.addEventListener('load', () => {
     		dropzone = new Dropzone('div#dropzone', { // eslint-disable-line no-undef
     			acceptedFiles: 'image/jpeg,image/png,image/gif',
     			parallelUploads: 1,
@@ -97,7 +97,7 @@
     		dropzone.on('queuecomplete', () => {
     			loading = false
     		})
-    	}
+    	})
 
     	return () => { document.head.removeChild(e) }
     })

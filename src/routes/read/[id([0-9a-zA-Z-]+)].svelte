@@ -26,11 +26,11 @@
 	import * as api from 'api.js'
 
 	export async function preload({ params }, { user }) {
-		const res = await api.get(`series_chapters/${parseInt(params.id.toString().split('-')[0], '36')}`, user && user.token)
+		const response = await api.get(`series_chapters/${parseInt(params.id.toString().split('-')[0], '36')}`, user && user.token)
 		
-		if (typeof res === 'string') this.error(404)
+		if (typeof response === 'string') this.error(404)
 		
-		return { webpub: res }
+		return { webpub: response }
 	}
 </script>
 
@@ -46,7 +46,7 @@
 
 		const e = document.createElement('script')
 		e.src = 'https://unpkg.com/xbreader@0.29.1/dist/xbreader-en.js'
-		document.head.appendChild(e)
+		document.head.append(e)
 
 		let destructor
 
@@ -85,14 +85,14 @@
 				if (query[1] == 'comments') reader.slider.goTo(99999)
 				else reader.slider.goTo(parseInt(query[1]) - 1)
 			},
-			onPageChange: num => {
+			onPageChange: number => {
 				const path = window.location.pathname.split('/')
 				if (path[path.length - 1] == '') path.pop()
-				window.history.replaceState(null, '', `${path.join('/')}/#/${num}`)
+				window.history.replaceState(null, '', `${path.join('/')}/#/${number}`)
 			}
 		}
 
-		e.onload = () => { window.xbreader(xbconfig) }
+		e.addEventListener('load', () => { window.xbreader(xbconfig) })
 
 		return () => {
 			if (destructor) destructor()

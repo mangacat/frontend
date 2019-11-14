@@ -4,7 +4,7 @@
 
 <div class="min-h-screen max-w-xl mx-auto pt-8 px-4">
     {#if loading}
-        {#each [...Array(10).keys()] as i}
+        {#each [...new Array(10).keys()] as i}
             <LoadingPulse class="{['max-w-lg', 'w-64', 'w-48'][Math.round(Math.random() * 3)]} h-8 bg-gray-200 dark:bg-gray-700 rounded mb-4" />
         {/each}
     {:else}
