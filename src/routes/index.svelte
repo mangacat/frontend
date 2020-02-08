@@ -1,26 +1,26 @@
 <script context="module">
-  import client,  { SERIES_CHAPTERS } from "utils/apollo.js";
+  import client,  { SERIES_CHAPTERS } from "utils/apollo.js"
 
 
   export async function preload() {
-    return {
-      cache: await client.query({
-		query: SERIES_CHAPTERS
-      })
-    };
+  	return {
+  		cache: await client.query({
+			query: SERIES_CHAPTERS
+  		})
+  	}
   }
 </script>
 
 <script>
-  import { slugify } from "utils";
-  import Chapter from "components/Chapter.svelte";
-  import LoadingPulse from "components/LoadingPulse.svelte";
+  import { slugify } from "utils"
+  import Chapter from "components/Chapter.svelte"
+  import LoadingPulse from "components/LoadingPulse.svelte"
 
-  import {  restore, query } from "svelte-apollo";
-  export let cache;
-  restore(client, SERIES_CHAPTERS, cache.data);
+  import {  restore, query } from "svelte-apollo"
+  export let cache
+  restore(client, SERIES_CHAPTERS, cache.data)
 
-  const chapters = query(client, { query: SERIES_CHAPTERS });
+  const chapters = query(client, { query: SERIES_CHAPTERS })
 </script>
 
 <svelte:head>

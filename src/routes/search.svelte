@@ -1,3 +1,151 @@
+<script context="module">
+    import client,  { TAGS, SEARCH } from "utils/apollo.js"
+    import { encode, decode } from 'qss'
+
+
+    export async function preload(params, { user }) {
+
+    	const results =await client.query({
+    		query: TAGS
+    	})
+    	let name = ''
+    	let status = []
+    	let country = []
+    	let tags_exc = []
+    	let tags_inc = []
+    	let hentai = false
+    	const offset = 0
+    	const limit = 18;
+    	({ name = '', status = [], country = [], tags_exc = [], tags_inc = [], hentai = false } = params.query)
+    	const result = await results
+    	const result_tags = result.data.tags
+
+    	status = status.constructor === String ? status.split(',') : []
+    	country = country.constructor === String ? country.split(',') : []
+    	tags_exc = tags_exc.constructor === String ? result_tags.filter(tag => tags_exc.split(',').includes(tag.name)) : []
+    	tags_inc = tags_inc.constructor === String ? result_tags.filter(tag => tags_inc.split(',').includes(tag.name)) : []
+    	return {
+    		cache: result,
+    		results: await client.query({
+    			query: SEARCH,
+    			variables: {
+    				hentai,
+    				limit,
+    				offset,
+    				name: name!== ""? "%" + name + "%": null,
+    				tags_inc: tags_inc.length !== 0? tags_inc: null,
+    				tags_exc: tags_exc.length !== 0 ? tags_exc: null,
+    				status: status.length !== 0 ? status: null,
+    				country: country.length !== 0? country: null
+
+    			}
+    		})
+    	}
+}
+</script>
+
+<script>
+
+import {  restore, query } from "svelte-apollo"
+import { stores , goto } from '@sapper/app'
+import { cdn } from 'cdn.js'
+import { onMount } from 'svelte'
+import { slide } from 'svelte/transition'
+import Loading from 'components/Loading.svelte'
+import { slugify, removeFalsy, mediaQuery } from 'utils'
+import SearchMultipleSelect from 'components/SearchMultipleSelect.svelte'
+
+const {  page } = stores()
+
+export let cache
+export let results
+restore(client, TAGS, cache.data)
+restore(client, SEARCH, results.data)
+
+const tags = query(client, { query: TAGS})
+let controller
+let active = -1
+const medQ = mediaQuery('(min-width: 1024px)')
+let filters = false
+let merged = false
+let name_input
+let name = ''
+let status = []
+let country = []
+let tags_exc = []
+let tags_inc = []
+let hentai = false
+const offset = 0
+const limit = 18
+
+const convertArraysToString = obj => {
+	const newObj = {}
+	Object.keys(obj).forEach(prop => {
+		if (Array.isArray(obj[prop])) newObj[prop] = obj[prop].join(',')
+		else newObj[prop] = obj[prop]
+	})
+	return newObj
+}
+
+const tagSearch = (search, options) => { return options.filter(elem => elem.name.toLowerCase().includes(search.toLowerCase())) }
+
+async function refetch() {
+	// TODO: remove activeElement
+	const el = document.activeElement
+	if (!merged || !process.browser) return []
+	if (controller) controller.abort()
+
+	active = -1
+
+	const query = encode(removeFalsy(convertArraysToString({ name, status, country, tags_exc: tags_exc.map(x => x.name), tags_inc: tags_inc.map(x => x.name), hentai }))).replace(new RegExp('%2C', 'g'), ',')
+
+	await goto(`search${query && `?${query}`}`)
+
+	if (el === name_input) el.focus()
+}
+$: search.refetch({
+	hentai,
+	limit,
+	offset,
+	name: name!== ""? "%" + name + "%": null,
+	tags_inc: tags_inc.length !== 0? tags_inc: null,
+	tags_exc: tags_exc.length !== 0 ? tags_exc: null,
+	status: status.length !== 0 ? status: null,
+	country: country.length !== 0? country: null
+}).then(async () => {
+	await refetch()
+})
+const search =  query(client, {query: SEARCH, variables: {
+	hentai: false,
+	limit: 18,
+	offset: 0,
+	name: null,
+}})
+
+
+onMount(async () => {
+	if (window.location.search) {
+		({ name = '', status = [], country = [], tags_exc = [], tags_inc = [], hentai = false } = decode(window.location.search.substring(1)))
+		const result = await $tags
+		const result_tags = result.data.tags
+
+		status = status.constructor === String ? status.split(',') : []
+		country = country.constructor === String ? country.split(',') : []
+		tags_exc = tags_exc.constructor === String ? result_tags.filter(tag => tags_exc.split(',').includes(tag.name)) : []
+		tags_inc = tags_inc.constructor === String ? result_tags.filter(tag => tags_inc.split(',').includes(tag.name)) : []
+	}
+
+	const query = encode(removeFalsy(convertArraysToString({ name, status, country, tags_exc: tags_exc.map(x => x.name), tags_inc: tags_inc.map(x => x.name), hentai }))).replace(new RegExp('%2C', 'g'), ',')
+
+	await goto(`search${query && `?${query}`}`)
+
+	merged = true
+
+	status = status
+})
+</script>
+
+
 <svelte:head>
     <title>Search - MangaCat</title>
 </svelte:head>
@@ -27,10 +175,19 @@
                 <SearchMultipleSelect bind:value={status} options={['Completed', 'Releasing', 'Hiatus', 'Cancelled']} />
                 <div class="capitalize mb-1 mt-4">country</div>
                 <SearchMultipleSelect bind:value={country} options={['Japan', 'China', 'Korea', 'Thailand', 'Vietnam', 'Philippines', 'Indonesia']} />
-                <div class="capitalize mb-1 mt-4">include tags</div>
-                <SearchMultipleSelect bind:value={tags_inc} options="{tags.filter(x => !tags_exc.includes(x))}" filterFunction="{tagSearch}" searchProperty="name" />
-                <div class="capitalize mb-1 mt-4">exclude tags</div>
-                <SearchMultipleSelect bind:value={tags_exc} options="{tags.filter(x => !tags_inc.includes(x))}" filterFunction="{tagSearch}" searchProperty="name" />
+                    {#await $tags}
+                        <p>loading</p>
+                    {:then result}
+                        {#if result.data}
+                             <div class="capitalize mb-1 mt-4">include tags</div>
+                            <SearchMultipleSelect bind:value={tags_inc} options="{result.data.tags.filter(x => !tags_exc.includes(x))}" filterFunction="{tagSearch}" searchProperty="name" />
+                            <div class="capitalize mb-1 mt-4">exclude tags</div>
+                            <SearchMultipleSelect bind:value={tags_exc} options="{result.data.tags.filter(x => !tags_inc.includes(x.tag_name))}" filterFunction="{tagSearch}" searchProperty="name" />
+                        {:else}
+                            <p>ERROR!!</p>
+                        {/if}
+                    {/await}
+
                 <label class="inline-flex items-center mb-1 mt-4">
                     <input type="checkbox" class="form-checkbox h-4 w-4" bind:checked={hentai}>
                     <span class="capitalize ml-2">hentai (18+)</span>
@@ -39,12 +196,12 @@
         {/if}
     </div>
     <div class="mb-8">
-        {#await search(name, status, country, tags_exc, tags_inc, hentai)}
+        {#await $search}
                 <div class="flex justify-center pt-2 pb-4">
                     <Loading />
                 </div>
         {:then results}
-            {#if results.length === 0 && merged}
+            {#if results.data.series === 0}
                 <div class="mt-4 text-center">
                     <div class="text-xl">
                         (╯°□°）╯︵ ┻━┻
@@ -55,7 +212,7 @@
                 </div>
             {:else}
                 <div class="results">
-                    {#each results as {id, name, cover, description, tags}, i}
+                    {#each results.data.series as {id, name, cover, description, tags_series}, i}
                         <div class="series rounded overflow-hidden bg-white dark:bg-gray-700 shadow hover:shadow-lg">
                             <a rel=prefetch class="z-20" href="/series/{id}/{slugify(name)}">
                                 <img src="{cdn(cover, { resize: '320,512' })}" alt="Cover for {name}"/>
@@ -71,9 +228,9 @@
                                         </p>
                                         <div class="flex-shrink-0 flex items-center py-2 px-3 bg-gray-300 dark:bg-gray-800 cursor-pointer" on:click={() => { active = i }}>
                                             <div class="flex flex-wrap h-6 text-sm overflow-hidden flex-grow leading-none">
-                                                {#each tags as {name}}
+                                                {#each tags_series as {tags_series}}
                                                     <div class="bg-white dark:bg-gray-900 rounded-full px-2 h-6 mr-2 flex items-center lowercase">
-                                                        {name}
+                                                        {tags_series.name}
                                                     </div>
                                                 {/each}
                                             </div>
@@ -87,9 +244,9 @@
                                     <div class="flex flex-col h-64">
                                         <div class="overflow-y-auto flex-grow px-3 pt-3 mb-2">
                                             <div class="flex flex-wrap -mt-1 text-sm leading-none">
-                                                {#each tags as {name}}
+                                                {#each tags_series as {tags_series}}
                                                     <div class="bg-gray-300 dark:bg-gray-800 rounded-full px-2 h-6 mr-1 mt-1 flex items-center lowercase">
-                                                        {name}
+                                                        {tags_series.name}
                                                     </div>
                                                 {/each}
                                             </div>
@@ -105,7 +262,11 @@
                         </div>
                     {/each}
                 </div>
+
             {/if}
+        {:catch error}
+        <p>error</p>
+
         {/await}
     </div>
 </div>
@@ -153,109 +314,3 @@
     left: -100%;
 }
 </style>
-
-<script context="module">
-    import * as api from 'api.js'
-
-    export async function preload(_, { user }) {
-    	const tags = await api.get(`tags?sortby=TagName&order=asc`, user && user.token)
-        
-    	return { tags }
-    }
-</script>
-
-<script>
-    import { cdn } from 'cdn.js'
-    import { onMount } from 'svelte'
-    import { goto } from '@sapper/app'
-    import { encode, decode } from 'qss'
-    import { slide } from 'svelte/transition'
-    import Loading from 'components/Loading.svelte'
-    import { slugify, removeFalsy, mediaQuery } from 'utils'
-    import SearchMultipleSelect from 'components/SearchMultipleSelect.svelte'
-    
-    export let tags
-
-    let controller
-    let active = -1
-    const medQ = mediaQuery('(min-width: 1024px)')
-    let filters = false
-    let merged = false
-    let name_input
-
-    let name = ''
-    let status = []
-    let country = []
-    let tags_exc = []
-    let tags_inc = []
-    let hentai = false
-
-    const convertArraysToString = obj => {
-    	const newObj = {}
-    	Object.keys(obj).forEach(prop => {
-    		if (Array.isArray(obj[prop])) newObj[prop] = obj[prop].join(',')
-    		else newObj[prop] = obj[prop]
-    	})
-    	return newObj
-    }
-
-    const tagSearch = (search, options) => { return options.filter(elem => elem.name.toLowerCase().includes(search.toLowerCase())) }
-
-    async function search() {
-    	// TODO: remove activeElement
-    	const el = document.activeElement
-    	if (!merged || !process.browser) return []
-    	if (controller) controller.abort()
-
-    	active = -1
-        
-    	const query = encode(removeFalsy(convertArraysToString({ name, status, country, tags_exc: tags_exc.map(x => x.name), tags_inc: tags_inc.map(x => x.name), hentai }))).replace(new RegExp('%2C', 'g'), ',')
-
-    	await goto(`search${query && `?${query}`}`)
-        
-    	if (el === name_input) el.focus()
-
-    	const api_query = removeFalsy({
-    		name__icontains: name,
-    		hentai,
-    		status__in: status.join('+'),
-    		tags__tags_id__in: tags_inc.map(x => x.id).join('+'),
-    		country__in: country.join('+')
-    	})
-
-    	const api_exclude = removeFalsy({
-    		tags__tags_id__in: tags_exc.map(x => x.id).join('+')
-    	})
-
-    	const api_data = {
-    		limit: 18,
-    		offset: 0,
-    		query: Object.keys(api_query).map(k => `${k}:${api_query[k]}`).join(','),
-    		exclude: Object.keys(api_exclude).map(k => `${k}:${api_exclude[k]}`).join(','),
-    	}
-
-    	controller = new AbortController()
-    	const signal = controller.signal
-    	const response = await fetch(`${api.base}/series${encode(removeFalsy(api_data)) && `?${encode(removeFalsy(api_data))}`}`, { signal })
-    	return await response.json()
-    }
-
-    onMount(async () => {
-    	if (window.location.search) {
-    		({ name = '', status = [], country = [], tags_exc = [], tags_inc = [], hentai = false } = decode(window.location.search.substring(1)))
-            
-    		status = status.constructor === String ? status.split(',') : []
-    		country = country.constructor === String ? country.split(',') : []
-    		tags_exc = tags_exc.constructor === String ? tags.filter(tag => tags_exc.split(',').includes(tag.name)) : []
-    		tags_inc = tags_inc.constructor === String ? tags.filter(tag => tags_inc.split(',').includes(tag.name)) : []
-    	}
-        
-    	const query = encode(removeFalsy(convertArraysToString({ name, status, country, tags_exc: tags_exc.map(x => x.name), tags_inc: tags_inc.map(x => x.name), hentai }))).replace(new RegExp('%2C', 'g'), ',')
-
-    	await goto(`search${query && `?${query}`}`)
-        
-    	merged = true
-
-    	status = status
-    })
-</script>
