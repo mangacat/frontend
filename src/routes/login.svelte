@@ -39,7 +39,7 @@
                     </div>
                     {#if errors.password}
                         <p class="text-sm text-red-600 dark:text-red-400 mt-1">{errors.password}</p>
-                    {/if}  
+                    {/if}
                 </div>
                 <div class="flex items-center justify-between">
                     <button type="submit" class="bg-gray-400 hover:bg-gray-300 text-gray-700 dark:text-gray-200 dark:bg-gray-800 dark:hover:bg-gray-900 font-bold py-2 px-4 rounded outline-none focus:shadow-outline dark:focus:bg-gray-900">
@@ -67,7 +67,24 @@
     import { validate, serialize } from 'formee'
     import { wallpaper } from 'wallpaper.js'
     import { mediaQuery } from 'utils'
-    
+   	import nhost from 'nhost-js-sdk'
+	import { stores } from '@sapper/app'
+
+const {  session } = stores()
+
+userSession.set(session)
+console.log(session)
+console.log(userSession)
+
+
+const config = {
+	endpoint: "http://in51b05uqk.lb.c1.gra.k8s.ovh.net",
+	storage: userSession
+}
+
+nhost.initializeApp(config)
+
+const auth = nhost.auth()
     const medQ = mediaQuery('(min-width: 1024px)')
 
     let password_visibilty = false
@@ -80,7 +97,8 @@
     const form_rules = {
     	email(val) {
     		if (!val) return 'Required'
-    		return /.+@.+\..+/.test(val) || 'Invalid email'
+			// return /.+@.+\..+/.test(val) || 'Invalid email'
+			return true
     	},
     	password(val) {
     		if (!val) return 'Required'
@@ -105,13 +123,15 @@
     	if (form_element.isValid) {
     		const data = serialize(form_element)
 
-    		const response = await userSession.login(data)
-            
-    		if (typeof response !== 'object') {
-    			errors.response = 'Invalid email or password'
-    		} else {
-    			goto('/')
-    		}
+			// const response = await userSession.login(data)
+			const response = await auth.login(data['email'], data['password']);
+			console.log(response)
+
+    		// if (typeof response !== 'object') {
+    		// 	errors.response = 'Invalid email or password'
+    		// } else {
+			goto('/')
+    		// }
     	}
     }
 </script>

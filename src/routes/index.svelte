@@ -2,7 +2,8 @@
   import client,  { SERIES_CHAPTERS } from "utils/apollo.js"
 
 
-  export async function preload() {
+  export async function preload({user}) {
+	  console.log(user)
   	return {
   		cache: await client.query({
 			query: SERIES_CHAPTERS

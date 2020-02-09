@@ -53,7 +53,7 @@
                     </div>
                     {#if errors.password}
                         <p class="text-sm text-red-600 dark:text-red-400 mt-1">{errors.password}</p>
-                    {/if}  
+                    {/if}
                 </div>
                 <div class="mb-6">
                     <label class="block text-gray-700 dark:text-gray-100 text-sm font-bold mb-2" for="confirm_password">
@@ -70,7 +70,7 @@
                                 {/if}
                             </svg>
                         </div>
-                    </div>  
+                    </div>
                     {#if errors.confirmed_password}
                         <p class="text-sm text-red-600 dark:text-red-400 mt-1">{errors.confirmed_password}</p>
                     {/if}
@@ -101,7 +101,32 @@
     import { validate, serialize } from 'formee'
     import { userSession } from 'stores.js'
     import { wallpaper } from 'wallpaper.js'
-    import { mediaQuery } from 'utils'
+	import { mediaQuery } from 'utils'
+	import { onMount } from 'svelte';
+	import nhost from 'nhost-js-sdk'
+	import { stores } from '@sapper/app'
+
+const {  session } = stores()
+
+userSession.set(session)
+console.log(session)
+console.log(userSession)
+
+
+const config = {
+	endpoint: "http://in51b05uqk.lb.c1.gra.k8s.ovh.net",
+	storage: userSession
+}
+
+nhost.initializeApp(config)
+
+const auth = nhost.auth()
+
+	onMount(() => {
+
+
+	})
+
 
     let password_visibilty = false
     let password_elem
@@ -112,7 +137,7 @@
     let submitting = false
     const medQ = mediaQuery('(min-width: 1024px)')
     const img = wallpaper()
-    
+
     const form_rules = {
     	username(val) {
     		if (!val) return 'Required'
@@ -165,21 +190,23 @@
 
     	if (form_element.isValid) {
     		const data = serialize(form_element)
+			console.log(data)
 
-    		if (!Object.keys(data).includes('g-recaptcha-response')) {
-    			alert("Verify you're not a robot by completing the recaptcha!")
-    			submitting = false
-    			return
-    		}
+    		// if (!Object.keys(data).includes('g-recaptcha-response')) {
+    		// 	alert("Verify you're not a robot by completing the recaptcha!")
+    		// 	submitting = false
+    		// 	return
+    		// }
 
     		try {
-    		    await userSession.register(data)
+				let output = await auth.register(data['email'], data['username'], data['password'], {});
+				console.log(output)
     		} catch (err) {
     			submitting = false
     			return
     		}
     	}
-        
+
     	submitting = false
     	goto('/')
     }
