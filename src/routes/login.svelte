@@ -61,30 +61,14 @@
 </script>
 
 <script>
-    import { goto } from '@sapper/app'
-    import { cdn } from 'cdn.js'
-    import { userSession } from 'stores.js'
-    import { validate, serialize } from 'formee'
-    import { wallpaper } from 'wallpaper.js'
-    import { mediaQuery } from 'utils'
-   	import nhost from 'nhost-js-sdk'
-	import { stores } from '@sapper/app'
+    import { goto , stores } from '@sapper/app'
+import { cdn } from 'cdn.js'
+import { userSession } from 'stores.js'
+import { validate, serialize } from 'formee'
+import { wallpaper } from 'wallpaper.js'
+import { mediaQuery } from 'utils'
+	} from '@sapper/app'
 
-const {  session } = stores()
-
-userSession.set(session)
-console.log(session)
-console.log(userSession)
-
-
-const config = {
-	endpoint: "http://in51b05uqk.lb.c1.gra.k8s.ovh.net",
-	storage: userSession
-}
-
-nhost.initializeApp(config)
-
-const auth = nhost.auth()
     const medQ = mediaQuery('(min-width: 1024px)')
 
     let password_visibilty = false
@@ -97,8 +81,8 @@ const auth = nhost.auth()
     const form_rules = {
     	email(val) {
     		if (!val) return 'Required'
-			// return /.+@.+\..+/.test(val) || 'Invalid email'
-			return true
+		// return /.+@.+\..+/.test(val) || 'Invalid email'
+		return true
     	},
     	password(val) {
     		if (!val) return 'Required'
@@ -123,15 +107,17 @@ const auth = nhost.auth()
     	if (form_element.isValid) {
     		const data = serialize(form_element)
 
-			// const response = await userSession.login(data)
-			const response = await auth.login(data['email'], data['password']);
-			console.log(response)
+		const response = await userSession.login({
+			"username": data['email'],
+			"password": data['password']
+		})
+		console.log(response)
 
-    		// if (typeof response !== 'object') {
-    		// 	errors.response = 'Invalid email or password'
-    		// } else {
+    		if (typeof response !== 'object') {
+    			errors.response = 'Invalid email or password'
+    		} else {
 			goto('/')
-    		// }
+    		}
     	}
     }
 </script>

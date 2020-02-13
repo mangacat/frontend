@@ -101,32 +101,7 @@
     import { validate, serialize } from 'formee'
     import { userSession } from 'stores.js'
     import { wallpaper } from 'wallpaper.js'
-	import { mediaQuery } from 'utils'
-	import { onMount } from 'svelte';
-	import nhost from 'nhost-js-sdk'
-	import { stores } from '@sapper/app'
-
-const {  session } = stores()
-
-userSession.set(session)
-console.log(session)
-console.log(userSession)
-
-
-const config = {
-	endpoint: "http://in51b05uqk.lb.c1.gra.k8s.ovh.net",
-	storage: userSession
-}
-
-nhost.initializeApp(config)
-
-const auth = nhost.auth()
-
-	onMount(() => {
-
-
-	})
-
+    import { mediaQuery } from 'utils'
 
     let password_visibilty = false
     let password_elem
@@ -190,7 +165,6 @@ const auth = nhost.auth()
 
     	if (form_element.isValid) {
     		const data = serialize(form_element)
-			console.log(data)
 
     		// if (!Object.keys(data).includes('g-recaptcha-response')) {
     		// 	alert("Verify you're not a robot by completing the recaptcha!")
@@ -199,8 +173,11 @@ const auth = nhost.auth()
     		// }
 
     		try {
-				let output = await auth.register(data['email'], data['username'], data['password'], {});
-				console.log(output)
+    		    await userSession.register({
+				username: data['username'],
+				email: data['emai'],
+				password: data['password'],
+			})
     		} catch (err) {
     			submitting = false
     			return

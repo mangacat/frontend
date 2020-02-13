@@ -51,50 +51,50 @@
                             {/if}
                         </div>
                     </div>
-                    {#if people.series_people_series.filter(x => x.type.toLowerCase().includes('story')).length !== 0}
+                    {#if people.people_series.filter(x => x.type.toLowerCase().includes('story')).length !== 0}
                         <h2 class="uppercase text-sm tracking-wide bg-gray-200 dark:bg-gray-700 -mx-4 py-1 px-4">
-                            writer for {people.series_people_series.filter(x => x.type.toLowerCase().includes('story')).length} series
+                            writer for {people.people_series.filter(x => x.type.toLowerCase().includes('story')).length} series
                         </h2>
                         <div class="series mb-6 mt-6">
-                            {#each people.series_people_series.filter(x => x.type.toLowerCase().includes('story')) as series}
-                                <a class="inline-block" href="/series/{series.people_series_people.id}/{slugify(series.people_series_people.name)}" title="{series.people_series_people.name}">
-                                    <img class="h-32 rounded shadow" src="{cdn(series.people_series_people.cover_image, { resize: '384,512' })}" alt="{series.people_series_people.name}">
+                            {#each people.people_series.filter(x => x.type.toLowerCase().includes('story')) as series}
+                                <a class="inline-block" href="/series/{series.people_series_series.id}/{slugify(series.people_series_series.name)}" title="{series.people_series_series.name}">
+                                    <img class="h-32 rounded shadow" src="{cdn(series.people_series_series.cover_image, { resize: '384,512' })}" alt="{series.people_series_series.name}">
                                 </a>
                             {/each}
                         </div>
                     {/if}
-                    {#if people.series_people_series.filter(x => x.type.toLowerCase().includes('art')).length !== 0}
+                    {#if people.people_series.filter(x => x.type.toLowerCase().includes('art')).length !== 0}
                         <h2 class="uppercase text-sm tracking-wide bg-gray-200 dark:bg-gray-700 -mx-4 py-1 px-4">
-                            illustrator for {people.series_people_series.filter(x => x.type.toLowerCase().includes('art')).length} series
+                            illustrator for {people.people_series.filter(x => x.type.toLowerCase().includes('art')).length} series
                         </h2>
                         <div class="series mb-6 mt-6">
-                            {#each people.series_people_series.filter(x => x.type.toLowerCase().includes('art')) as series}
-                                <a class="inline-block" href="/series/{series.people_series_people.id}/{slugify(series.people_series_people.name)}" title="{series.people_series_people.name}">
-                                    <img class="h-32 rounded shadow" src="{cdn(series.people_series_people.cover_image, { resize: '384,512' })}" alt="{series.people_series_people.name}">
+                            {#each people.people_series.filter(x => x.type.toLowerCase().includes('art')) as series}
+                                <a class="inline-block" href="/series/{series.people_series_series.id}/{slugify(series.people_series_series.name)}" title="{series.people_series_series.name}">
+                                    <img class="h-32 rounded shadow" src="{cdn(series.people_series_series.cover_image, { resize: '384,512' })}" alt="{series.people_series_series.name}">
                                 </a>
                             {/each}
                         </div>
                     {/if}
                 {:else}
                     <div>
-                        {#if people.series_people_series.filter(x => x.type.toLowerCase().includes('story')).length !== 0}
+                        {#if people.people_series.filter(x => x.type.toLowerCase().includes('story')).length !== 0}
                             <h3 class="uppercase text-sm tracking-wide">series written by</h3>
                             <h1 class="font-bold text-xl pb-4 mb-4 border-b border-gray-500 dark:border-gray-600">{people.name}</h1>
                             <div class="series mb-8">
-                                {#each people.series_people_series.filter(x => x.type.toLowerCase().includes('story')) as series }}
-                                    <a class="inline-block" href="/series/{series.people_series_people.id}/{slugify(series.people_series_people.name)}" title="{series.people_series_people.name}">
-                                        <img class="h-48 rounded shadow" src="{cdn(series.people_series_people.cover_image, { resize: '384,512' })}" alt="{series.people_series_people.name}">
+                                {#each people.people_series.filter(x => x.type.toLowerCase().includes('story')) as series }}
+                                    <a class="inline-block" href="/series/{series.people_series_series.id}/{slugify(series.people_series_series.name)}" title="{series.people_series_series.name}">
+                                        <img class="h-48 rounded shadow" src="{cdn(series.people_series_series.cover_image, { resize: '384,512' })}" alt="{series.people_series_series.name}">
                                     </a>
                                 {/each}
                             </div>
                         {/if}
-                        {#if people.series_people_series.filter(x => x.type.toLowerCase().includes('art')).length !== 0}
+                        {#if people.people_series.filter(x => x.type.toLowerCase().includes('art')).length !== 0}
                             <h3 class="uppercase text-sm tracking-wide">series illustrated by</h3>
                             <h1 class="font-bold text-xl pb-4 mb-4 border-b border-gray-500 dark:border-gray-600">{people.name}</h1>
                             <div class="series mb-8">
-                                {#each people.series_people_series.filter(x => x.type.toLowerCase().includes('art')) as series}
-                                    <a class="inline-block" href="/series/{series.people_series_people.id}/{slugify(series.people_series.name)}" title="{series.people_series_people.name}">
-                                        <img class="h-48 rounded shadow" src="{cdn(series.people_series_people.cover_image, { resize: '384,512' })}" alt="{series.people_series_people.name}">
+                                {#each people.people_series.filter(x => x.type.toLowerCase().includes('art')) as series}
+                                    <a class="inline-block" href="/series/{series.people_series_series.id}/{slugify(series.people_series.name)}" title="{series.people_series_series.name}">
+                                        <img class="h-48 rounded shadow" src="{cdn(series.people_series_series.cover_image, { resize: '384,512' })}" alt="{series.people_series_series.name}">
                                     </a>
                                 {/each}
                             </div>

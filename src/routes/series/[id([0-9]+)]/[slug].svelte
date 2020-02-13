@@ -58,7 +58,7 @@
                 <div>
 
                     <div id="cover-container" class="sticky" style="top: { $nav_height + 25}px;">
-                        <img alt="Cover for {series.name}" src="{cdn(series.cover, { resize: '384,512' })}" class="h-64 w-48 rounded shadow mx-auto">
+                        <img alt="Cover for {series.name}" src="{cdn(series.cover_image, { resize: '384,512' })}" class="h-64 w-48 rounded shadow mx-auto">
                         <div class="flex justify-center mt-2 items-center text-sm tabular-nums">
                             <svg class="fill-current h-3 mx-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
                                 <path d="M572.52 241.4C518.29 135.59 410.93 64 288 64S57.68 135.64 3.48 241.41a32.35 32.35 0 0 0 0 29.19C57.71 376.41 165.07 448 288 448s230.32-71.64 284.52-177.41a32.35 32.35 0 0 0 0-29.19zM288 400a144 144 0 1 1 144-144 143.93 143.93 0 0 1-144 144zm0-240a95.31 95.31 0 0 0-25.31 3.79 47.85 47.85 0 0 1-66.9 66.9A95.78 95.78 0 1 0 288 160z" />
@@ -228,10 +228,12 @@
                             </h2>
                             <div class="related-series">
                                 {#each series.series_related as  rel_series }
+									{#if rel_series.series_related_related !== null}
                                     <a class="inline-block relative" href="/series/{rel_series.series_related_related.id}/{slugify(rel_series.series_related_related.name)}">
                                         <img class="h-32 w-24 rounded shadow" src="{cdn(rel_series.series_related_related.cover_image, { resize: '384,512' })}" alt="{rel_series.series_related_related.name}">
                                         <div class="text-sm absolute inset-x-0 bottom-0 leading-tight py-1 text-center rounded-b text-gray-200" style="background-color: rgba(26, 32, 44, 0.6); text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);">{rel_series.type}</div>
                                     </a>
+									{/if}
                                 {/each}
                             </div>
                         </div>

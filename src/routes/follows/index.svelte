@@ -1,14 +1,16 @@
 <script context="module">
-  import client,  { SERIES_CHAPTERS } from "utils/apollo.js"
+  import client,  { PRIVATE_SERIES_CHAPTERS } from "utils/apollo.js"
 
 
-  export async function preload({user}) {
-	  console.log(user)
-  	return {
-  		cache: await client.query({
-			query: SERIES_CHAPTERS
-  		})
-  	}
+  export async function preload( { params, user, session }) {
+	//   console.log(user)
+	//   console.log(session)
+	//   console.log(params)
+  	// return {
+  	// 	cache: await client.query({
+	// 		query: PRIVATE_SERIES_CHAPTERS
+  	// 	})
+  	// }
   }
 </script>
 
@@ -16,12 +18,20 @@
   import { slugify } from "utils"
   import Chapter from "components/Chapter.svelte"
   import LoadingPulse from "components/LoadingPulse.svelte"
+  import { stores } from '@sapper/app'
 
-  import {  restore, query } from "svelte-apollo"
-  export let cache
+  import {  query } from "svelte-apollo"
+//   export let cache
 //   restore(client, SERIES_CHAPTERS, cache.data)
+  const { session } = stores()
+  console.log(session)
 
-  const chapters = query(client, { query: SERIES_CHAPTERS })
+
+  const chapters = query(client, { query: PRIVATE_SERIES_CHAPTERS,
+  	variables: {
+	  token: $session.user.rss_token
+
+  	}})
 </script>
 
 <svelte:head>

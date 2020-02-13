@@ -1,6 +1,6 @@
 <div class="profile">
     <div class="text-right font-bold">Username</div>
-    <div>{$session.user.username}</div>
+    <div>{$session.user.display_name}</div>
     <div class="text-right font-bold">Email</div>
     <div>{$session.user.email}</div>
     <div class="text-right font-bold">Description</div>

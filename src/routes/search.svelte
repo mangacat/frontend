@@ -18,12 +18,12 @@
     	const limit = 18;
     	({ name = '', status = [], country = [], tags_exc = [], tags_inc = [], hentai = false } = params.query)
     	const result = await results
-    	const result_tags = result.data.tags
+	const result_tags = result.data.tags
 
     	status = status.constructor === String ? status.split(',') : []
-    	country = country.constructor === String ? country.split(',') : []
-    	tags_exc = tags_exc.constructor === String ? result_tags.filter(tag => tags_exc.split(',').includes(tag.name)) : []
-    	tags_inc = tags_inc.constructor === String ? result_tags.filter(tag => tags_inc.split(',').includes(tag.name)) : []
+	country = country.constructor === String ? country.split(',') : []
+    	tags_exc = tags_exc.constructor === String && tags_exc.length != 0 ? result_tags.filter(tag => tags_exc.split(',').includes(tag.name)).map(x => x.id) : []
+	tags_inc = tags_inc.constructor === String  && tags_inc.length != 0? result_tags.filter(tag => tags_inc.split(',').includes(tag.name)).map(x => x.id) : []
     	return {
     		cache: result,
     		results: await client.query({
@@ -40,7 +40,7 @@
 
     			}
     		})
-    	}
+	}
 }
 </script>
 
@@ -89,7 +89,7 @@ const convertArraysToString = obj => {
 
 const tagSearch = (search, options) => { return options.filter(elem => elem.name.toLowerCase().includes(search.toLowerCase())) }
 
-async function refetch() {
+async function refetch(hentai, limit, offset, name, tags_inc, tags_exc, status, country) {
 	// TODO: remove activeElement
 	const el = document.activeElement
 	if (!merged || !process.browser) return []
@@ -98,23 +98,24 @@ async function refetch() {
 	active = -1
 
 	const query = encode(removeFalsy(convertArraysToString({ name, status, country, tags_exc: tags_exc.map(x => x.name), tags_inc: tags_inc.map(x => x.name), hentai }))).replace(new RegExp('%2C', 'g'), ',')
-
+	search.refetch({
+		hentai,
+		limit,
+		offset,
+		name: name!== ""? "%" + name + "%": null,
+		tags_inc: tags_inc.length !== 0? tags_inc.map(x => x.id): null,
+		tags_exc: tags_exc.length !== 0 ? tags_exc.map(x => x.id): null,
+		status: status.length !== 0 ? status: null,
+		country: country.length !== 0? country: null
+	})
 	await goto(`search${query && `?${query}`}`)
+
 
 	if (el === name_input) el.focus()
 }
-$: search.refetch({
-	hentai,
-	limit,
-	offset,
-	name: name!== ""? "%" + name + "%": null,
-	tags_inc: tags_inc.length !== 0? tags_inc: null,
-	tags_exc: tags_exc.length !== 0 ? tags_exc: null,
-	status: status.length !== 0 ? status: null,
-	country: country.length !== 0? country: null
-}).then(async () => {
-	await refetch()
-})
+$: {
+	refetch(hentai, limit, offset, name, tags_inc, tags_exc, status, country)
+}
 const search =  query(client, {query: SEARCH, variables: {
 	hentai: false,
 	limit: 18,
@@ -131,8 +132,9 @@ onMount(async () => {
 
 		status = status.constructor === String ? status.split(',') : []
 		country = country.constructor === String ? country.split(',') : []
-		tags_exc = tags_exc.constructor === String ? result_tags.filter(tag => tags_exc.split(',').includes(tag.name)) : []
-		tags_inc = tags_inc.constructor === String ? result_tags.filter(tag => tags_inc.split(',').includes(tag.name)) : []
+
+		tags_exc = tags_exc.constructor === String && tags_exc.length != 0 ? result_tags.filter(tag => tags_exc.split(',').includes(tag.name)) : []
+		tags_inc = tags_inc.constructor === String  && tags_inc.length != 0? result_tags.filter(tag => tags_inc.split(',').includes(tag.name)) : []
 	}
 
 	const query = encode(removeFalsy(convertArraysToString({ name, status, country, tags_exc: tags_exc.map(x => x.name), tags_inc: tags_inc.map(x => x.name), hentai }))).replace(new RegExp('%2C', 'g'), ',')
@@ -201,7 +203,7 @@ onMount(async () => {
                     <Loading />
                 </div>
         {:then results}
-            {#if results.data.series === 0}
+            {#if  results.data === undefined ? true: results.data.series === 0}
                 <div class="mt-4 text-center">
                     <div class="text-xl">
                         (╯°□°）╯︵ ┻━┻
