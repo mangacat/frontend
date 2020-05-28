@@ -1,0 +1,21 @@
+query seriesChapters {
+  series_chapters(limit: 25, order_by: { time_uploaded: desc }) {
+    id
+    title
+    chapter_number_volume
+    chapter_number_absolute
+    time_uploaded
+    views
+    comments
+    series_chapters_series {
+      id
+      name
+    }
+    groups_series_chapters {
+      groups_scanlation_series_chapters_groups {
+        name
+        id
+      }
+    }
+  }
+}

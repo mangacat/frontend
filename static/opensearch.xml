@@ -1,8 +1,0 @@
-  <OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/"
-                         xmlns:moz="http://www.mozilla.org/2006/browser/search/">
-  <ShortName>MangaCat</ShortName>
-  <Description>Searching MangaCat's Manga Database</Description>
-  <InputEncoding>UTF-8</InputEncoding>
-  <Image height="128" width="128" type="image/png">https://manga.cat/favicon.png</Image>
-  <Url type="text/html" method="get" template="https://manga.cat/search?name={searchTerms}" />
-  </OpenSearchDescription>
