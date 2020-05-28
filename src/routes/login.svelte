@@ -67,7 +67,7 @@ import { userSession } from 'stores.js'
 import { validate, serialize } from 'formee'
 import { wallpaper } from 'wallpaper.js'
 import { mediaQuery } from 'utils'
-	} from '@sapper/app'
+	// } from '@sapper/app'
 
     const medQ = mediaQuery('(min-width: 1024px)')
 
