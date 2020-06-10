@@ -108,7 +108,7 @@ import { mediaQuery } from 'utils'
     		const data = serialize(form_element)
 
 		const response = await userSession.login({
-			"username": data['email'],
+			"email": data['email'],
 			"password": data['password']
 		})
 		console.log(response)
