@@ -47,7 +47,7 @@
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-svelte3": "^2.7.3",
     "formee": "^1.0.0",
-    "popper.js": "^1.15.0",
+    "popper.js": "^1.16.1",
     "postcss": "^7.0.18",
     "postcss-nested": "^4.1.2",
     "postcss-preset-env": "^6.7.0",
